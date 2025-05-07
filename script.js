@@ -98,10 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 statusResultDiv.textContent = "狀態：恭喜過關！";
                 statusResultDiv.classList.add('pass');
             } else if (finalGrade >= 40) {
-                statusResultDiv.textContent = "狀態：需要補考！";
+                statusResultDiv.textContent = "狀態：快讀，還有機會，需要補考";
                 statusResultDiv.classList.add('makeup');
             } else {
-                statusResultDiv.textContent = "狀態：死當！";
+                statusResultDiv.textContent = "狀態：笑死 死當仔 可憐";
                 statusResultDiv.classList.add('fail');
             }
             statusResultDiv.style.display = 'block';
@@ -116,9 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Calculate needed for 60 (avoid makeup)
             let neededFor60 = Math.ceil((60 - 0.5 - knownUnroundedScoreSum) / W_E_each);
             if (neededFor60 > 100) {
-                neededFor60ResultDiv.textContent = "為達60分(免補考)：即使三段段考考100分，也無法達到60分。";
+                neededFor60ResultDiv.textContent = "為達60分(免補考)：超級可憐，即使三段段考考100分，也無法達到60分。";
             } else if (neededFor60 <= 0) {
-                neededFor60ResultDiv.textContent = "為達60分(免補考)：您已達到60分標準，無需擔心！";
+                neededFor60ResultDiv.textContent = "為達60分(免補考)：考零分也沒差 您已達到60分標準，無需擔心！";
             } else {
                 neededFor60ResultDiv.textContent = `為達60分(免補考)，您的三段段考至少需要 ${neededFor60} 分。`;
             }
@@ -126,9 +126,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Calculate needed for 40 (avoid fail)
             let neededFor40 = Math.ceil((40 - 0.5 - knownUnroundedScoreSum) / W_E_each);
             if (neededFor40 > 100) {
-                neededFor40ResultDiv.textContent = "為達40分(免死當)：即使三段段考考100分，也無法達到40分。";
+                neededFor40ResultDiv.textContent = "為達40分(免死當)：超級可憐，即使三段段考考100分，也無法達到40分。";
             } else if (neededFor40 <= 0) {
-                neededFor40ResultDiv.textContent = "為達40分(免死當)：您已達到40分標準！";
+                neededFor40ResultDiv.textContent = "為達40分(免死當)：考零分也沒差 您已達到40分標準！";
             } else {
                 neededFor40ResultDiv.textContent = `為達40分(免死當)，您的三段段考至少需要 ${neededFor40} 分。`;
             }

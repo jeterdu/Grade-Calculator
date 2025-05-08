@@ -2,12 +2,12 @@ body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
     margin: 0;
-    padding: 20px;
+    padding: 0; /* Remove body padding if footer spans full width */
     background-color: #f4f4f4;
     color: #333;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column; /* Allow footer to sit below container */
+    align-items: center; 
     min-height: 100vh;
 }
 
@@ -17,7 +17,10 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
     width: 100%;
-    max-width: 600px;
+    max-width: 650px;
+    margin-top: 20px; /* Add margin to top of container */
+    margin-bottom: 20px; /* Add margin to bottom of container */
+    box-sizing: border-box;
 }
 
 h1 {
@@ -30,25 +33,29 @@ h2, h3 {
     color: #555;
     margin-top: 20px;
     margin-bottom: 10px;
+    display: flex; 
+    align-items: center; 
 }
 
 .options-group {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px; 
     margin-bottom: 20px;
 }
 
 fieldset {
     border: 1px solid #ddd;
     border-radius: 5px;
-    padding: 15px;
+    padding: 10px 15px; 
 }
 
 legend {
     font-weight: bold;
     color: #333;
     padding: 0 5px;
+    display: flex; 
+    align-items: center; 
 }
 
 .options-group div, .score-item {
@@ -58,17 +65,18 @@ legend {
 .options-group label, .score-item label {
     margin-left: 5px;
     cursor: pointer;
+    color: #444; 
 }
 
 .score-item {
     display: flex;
     align-items: center;
     gap: 10px;
-    flex-wrap: wrap;
+    flex-wrap: wrap; 
 }
 
 .score-item label {
-    flex-basis: 150px; /* Adjust as needed */
+    flex-basis: 180px; 
     flex-shrink: 0;
 }
 
@@ -78,17 +86,19 @@ input[type="number"] {
     border-radius: 4px;
     width: 100px;
     box-sizing: border-box;
+    font-size: 1em; 
 }
 
 input[type="radio"] {
     cursor: pointer;
+    margin-right: 3px;
 }
 
 button {
     display: inline-block;
     background-color: #5cb85c;
     color: white;
-    padding: 10px 20px;
+    padding: 10px 18px; 
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -105,10 +115,16 @@ button:hover {
 #clearButton {
     background-color: #f0ad4e;
 }
-
 #clearButton:hover {
     background-color: #eea236;
 }
+#copyResultsButton {
+    background-color: #5bc0de;
+}
+#copyResultsButton:hover {
+    background-color: #46b8da;
+}
+
 
 .results-output {
     margin-top: 20px;
@@ -119,15 +135,66 @@ button:hover {
 }
 
 .result-item {
-    margin-bottom: 8px;
+    margin-bottom: 10px; 
     font-size: 1.1em;
+    line-height: 1.5; 
 }
 
 #statusResult.pass { color: green; font-weight: bold;}
 #statusResult.makeup { color: orange; font-weight: bold;}
 #statusResult.fail { color: red; font-weight: bold;}
 
-/* Hide results initially */
-#totalGradeResult, #statusResult, #neededFor60Result, #neededFor40Result {
+.tooltip {
+    position: relative;
+    cursor: help;
+    font-size: 0.9em;
+    color: #777;
+    margin-left: 8px;
+    border: 1px solid #ccc; 
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+}
+
+#totalGradeResult, #statusResult, #neededResult, #copyResultsButton {
     display: none;
 }
+
+/* --- Footer Styles --- */
+footer {
+    text-align: center; 
+    margin-top: 30px;   
+    padding: 20px 15px; /* Added horizontal padding */
+    border-top: 1px solid #e0e0e0; 
+    width: 100%; /* Make footer span full width */
+    box-sizing: border-box; /* Include padding in width */
+    background-color: #f9f9f9; /* Optional: slight background for footer */
+}
+
+footer p {
+    font-size: 0.85em;  /* Slightly larger for readability */
+    color: #666;      /* Slightly darker grey */
+    margin: 6px 0;     
+    line-height: 1.6;  
+}
+
+footer a { /* Style for the link in footer */
+    color: #007bff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* No specific style needed for .footer-separator if using separate <p> tags like above */
+/* If using spans with separators, you might uncomment and adjust this:
+.footer-separator {
+    margin: 0 10px;     
+    color: #ccc;        
+}
+*/

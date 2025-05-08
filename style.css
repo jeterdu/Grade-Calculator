@@ -1,14 +1,14 @@
-/* --- CSS Color Variables --- */
+/* --- CSS Color Variables (Default Light Theme) --- */
 :root {
-    --system-background: #f0f2f5; /* Light: Page background */
-    --content-background: #ffffff; /* Light: Container, Fieldset, etc. */
-    --text-primary: #1c1c1e;       /* Light: Main text */
-    --text-secondary: #3c3c43;     /* Light: Sub-headings, secondary text */
-    --text-tertiary: #8a8a8e;      /* Light: Footer text, legends if less prominent */
-    --text-quaternary: #636366;    /* Light: Legend text if more prominent */
+    --system-background: #f0f2f5;
+    --content-background: #ffffff;
+    --text-primary: #1c1c1e;      
+    --text-secondary: #3c3c43;    
+    --text-tertiary: #8a8a8e;     
+    --text-quaternary: #636366;   
 
-    --separator-color: #c6c6c8;     /* Light: Borders, dividers */
-    --separator-opaque: #d1d1d6;    /* Light: Footer border */
+    --separator-color: #c6c6c8;    
+    --separator-opaque: #d1d1d6;   
 
     --accent-blue: #007AFF;
     --accent-blue-hover: #0056b3;
@@ -17,58 +17,66 @@
     --button-secondary-text: var(--accent-blue);
     --button-secondary-hover-bg: #d1d1d6;
 
-    --input-bg: var(--system-background); /* Input field background */
+    --input-bg: var(--system-background); 
     --input-border: var(--separator-color);
     --input-focus-shadow: rgba(0, 122, 255, 0.3);
 
     --status-pass: #34C759;
     --status-makeup: #FF9500;
     --status-fail: #FF3B30;
+    --status-fail-shadow: rgba(255, 59, 48, 0.3); /* For invalid input shadow */
 
-    --results-bg: transparent; /* Or a slightly different light shade */
-    --footer-bg: var(--system-background); /* Matches page background */
+    --results-bg: transparent; 
+    --footer-bg: var(--system-background); 
     --link-color: var(--accent-blue);
 
     --card-shadow: rgba(0,0,0,0.08);
     --grouped-item-shadow: rgba(0,0,0,0.03);
+    
+    --theme-toggle-button-bg: transparent;
+    --theme-toggle-button-border: var(--separator-color);
+    --theme-toggle-button-text: var(--text-secondary);
+    --theme-toggle-button-hover-bg: rgba(0, 0, 0, 0.05); /* Subtle hover */
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --system-background: #000000; /* Dark: True black or very dark gray e.g. #121212 */
-        --content-background: #1c1c1e; /* Dark: Content areas */
-        --text-primary: #ffffff;       /* Dark: Main text */
-        --text-secondary: rgba(235, 235, 245, 0.6); /* Dark: Secondary text (iOS style) */
-        --text-tertiary: rgba(235, 235, 245, 0.3); /* Dark: Footer text */
-        --text-quaternary: rgba(235, 235, 245, 0.6); /* Dark: Legend text */
+/* --- Dark Theme Variable Overrides --- */
+body.dark-theme {
+    --system-background: #000000; 
+    --content-background: #1c1c1e; 
+    --text-primary: #ffffff;       
+    --text-secondary: rgba(235, 235, 245, 0.6); 
+    --text-tertiary: rgba(235, 235, 245, 0.3); 
+    --text-quaternary: rgba(235, 235, 245, 0.6); 
 
-        --separator-color: rgba(84, 84, 88, 0.65);  /* Dark: Borders, dividers */
-        --separator-opaque: #38383A;            /* Dark: Footer border */
+    --separator-color: rgba(84, 84, 88, 0.65);  
+    --separator-opaque: #38383A;            
 
-        /* Accent blue might need slight adjustment for dark mode, but often kept same or slightly brighter */
-        --accent-blue: #0A84FF; /* iOS Dark Mode Blue */
-        --accent-blue-hover: #0060c0; 
+    --accent-blue: #0A84FF; 
+    --accent-blue-hover: #0060c0; 
 
-        --button-secondary-bg: #2c2c2e; /* Darker gray for secondary buttons */
-        --button-secondary-text: var(--accent-blue);
-        --button-secondary-hover-bg: #3a3a3c;
+    --button-secondary-bg: #2c2c2e; 
+    /* --button-secondary-text: var(--accent-blue); /* Stays same */
+    --button-secondary-hover-bg: #3a3a3c;
 
-        --input-bg: #2c2c2e; /* Dark input field background */
-        --input-border: var(--separator-color);
-        --input-focus-shadow: rgba(10, 132, 255, 0.4); /* Adjusted shadow for dark */
+    --input-bg: #2c2c2e; 
+    /* --input-border: var(--separator-color); /* Stays same */
+    --input-focus-shadow: rgba(10, 132, 255, 0.4); 
 
-        --status-pass: #30D158;   /* iOS Dark Green */
-        --status-makeup: #FF9F0A; /* iOS Dark Orange */
-        --status-fail: #FF453A;   /* iOS Dark Red */
+    --status-pass: #30D158;   
+    --status-makeup: #FF9F0A; 
+    --status-fail: #FF453A;   
+    --status-fail-shadow: rgba(255, 69, 58, 0.4);
         
-        --results-bg: transparent; 
-        --footer-bg: var(--system-background);
-        --link-color: var(--accent-blue);
+    /* --results-bg: transparent; /* Stays same */
+    /* --footer-bg: var(--system-background); /* Stays same as it uses system-background */
+    /* --link-color: var(--accent-blue); /* Stays same as it uses accent-blue */
 
-        --card-shadow: rgba(0,0,0,0.25); /* Dark mode shadows can be more subtle or different */
-        --grouped-item-shadow: rgba(0,0,0,0.1);
-    }
+    --card-shadow: rgba(0,0,0,0.3); 
+    --grouped-item-shadow: rgba(0,0,0,0.15);
+
+    --theme-toggle-button-hover-bg: rgba(255, 255, 255, 0.1);
 }
+
 
 /* --- Apply Variables to Existing Styles --- */
 
@@ -83,6 +91,7 @@ body {
     flex-direction: column; 
     align-items: center; 
     min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth theme transition */
 }
 
 .container {
@@ -95,14 +104,43 @@ body {
     margin-top: 20px; 
     margin-bottom: 20px; 
     box-sizing: border-box;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth theme transition */
 }
+
+/* Theme Toggle Button specific styles */
+.header-utils {
+    text-align: right;
+    margin-bottom: -10px; /* Adjust to pull it up a bit if h1 has large top margin */
+    position: relative; /* To keep it above h1 if margins overlap */
+    z-index: 10;
+}
+
+#themeToggleButton {
+    background: var(--theme-toggle-button-bg);
+    border: 1px solid var(--theme-toggle-button-border);
+    color: var(--theme-toggle-button-text);
+    padding: 6px 12px;
+    border-radius: 20px; /* Pill shape */
+    cursor: pointer;
+    font-size: 20px; /* For emoji icon */
+    line-height: 1; /* Ensure icon is centered */
+    margin-top: 0; 
+    margin-right: 0; /* Align to the very right of container padding */
+    min-width: auto; /* Override general button min-width */
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+#themeToggleButton:hover {
+    background-color: var(--theme-toggle-button-hover-bg);
+}
+
 
 h1 {
     font-size: 28px;
     font-weight: 600; 
     text-align: center;
     color: var(--text-primary);
-    margin-top: 10px;
+    margin-top: 10px; /* Reduced to accommodate toggle button */
     margin-bottom: 25px;
 }
 
@@ -152,6 +190,7 @@ fieldset {
     margin: 0; 
     background-color: var(--content-background); 
     box-shadow: 0 1px 1px var(--grouped-item-shadow); 
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .options-group div {
@@ -163,13 +202,15 @@ fieldset {
 
 .options-group div:not(:last-child) {
     border-bottom: 1px solid var(--separator-color); 
+    transition: border-color 0.3s ease;
 }
 
-.options-group label, .score-item label { /* General labels */
+.options-group label, .score-item label {
     margin-left: 0; 
     cursor: pointer;
     font-size: 16px;
     color: var(--text-primary); 
+    transition: color 0.3s ease;
 }
 
 .score-item {
@@ -185,6 +226,7 @@ fieldset {
     padding-top: 5px; 
     padding-bottom: 5px;
     box-shadow: 0 1px 1px var(--grouped-item-shadow);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 .scores-input h2 {
     margin-left: 15px; 
@@ -193,6 +235,7 @@ fieldset {
 }
 .score-item:not(:last-child) {
     border-bottom: 1px solid var(--separator-color);
+    transition: border-color 0.3s ease;
 }
 
 .score-item label {
@@ -210,25 +253,25 @@ input[type="number"] {
     background-color: var(--input-bg); 
     color: var(--text-primary);
     text-align: right; 
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 input[type="number"]:focus { 
     border-color: var(--accent-blue);
     outline: none; 
     box-shadow: 0 0 0 2px var(--input-focus-shadow); 
 }
-/* --- Input Validation Style (iOS inspired: subtle border) --- */
 input[type="number"].input-invalid {
     border-color: var(--status-fail);
-    box-shadow: 0 0 0 2px var(--status-fail-shadow, rgba(255, 59, 48, 0.3)); /* Define --status-fail-shadow if needed */
+    box-shadow: 0 0 0 2px var(--status-fail-shadow); 
 }
-/* Placeholder for error messages if you add them via JS */
 .error-message {
     font-size: 13px;
     color: var(--status-fail);
     margin-top: 4px;
-    flex-basis: 100%; /* Make it take full width below the input */
-    margin-left: calc(170px + 10px + 15px); /* Align with input field, adjust if layout changes */
-    display: none; /* Hidden by default */
+    flex-basis: 100%; 
+    margin-left: calc(170px + 12px + 15px); /* label_width + radio_margin + container_padding */
+    display: none; 
+    transition: color 0.3s ease;
 }
 
 
@@ -245,7 +288,8 @@ input[type="radio"] {
     vertical-align: middle;
     flex-shrink: 0; 
     cursor: pointer;
-    background-color: var(--content-background); /* Ensure radio bg matches content bg */
+    background-color: var(--content-background); /* Radio background same as cell */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 input[type="radio"]:checked {
     border-color: var(--accent-blue);
@@ -256,12 +300,13 @@ input[type="radio"]:checked::after {
     display: block;
     width: 10px; 
     height: 10px;
-    background: var(--content-background); /* Dot color should contrast with checked bg */
+    background: var(--content-background); /* Dot color needs to contrast with checked state */
     border-radius: 50%;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    transition: background-color 0.3s ease;
 }
 .options-group div > label { 
     flex-grow: 1; 
@@ -276,7 +321,7 @@ button {
     padding: 12px 20px;
     margin-top: 25px; 
     margin-right: 10px;
-    transition: background-color 0.2s ease, opacity 0.2s ease; 
+    transition: background-color 0.2s ease, opacity 0.2s ease, color 0.2s ease; 
     text-align: center;
     min-width: 100px; 
 }
@@ -286,7 +331,7 @@ button:active {
 
 #calculateButton {
     background-color: var(--accent-blue); 
-    color: white; /* Usually white for solid blue buttons */
+    color: white; 
     font-weight: 600; 
 }
 #calculateButton:hover {
@@ -308,6 +353,7 @@ button:active {
     background-color: var(--results-bg); 
     border: none; 
     border-radius: 8px; 
+    transition: background-color 0.3s ease;
 }
 .results-output h3 { 
     margin-left: 0; 
@@ -319,7 +365,8 @@ button:active {
     font-size: 1.05em; 
     line-height: 1.5; 
     padding: 8px 0; 
-    color: var(--text-primary); /* Ensure result text uses theme color */
+    color: var(--text-primary); 
+    transition: color 0.3s ease;
 }
 
 #statusResult.pass { color: var(--status-pass); font-weight: 600;} 
@@ -339,6 +386,7 @@ footer {
     width: 100%; 
     box-sizing: border-box; 
     background-color: var(--footer-bg); 
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 footer p {
@@ -346,11 +394,13 @@ footer p {
     color: var(--text-tertiary); 
     margin: 4px 0;     
     line-height: 1.4;  
+    transition: color 0.3s ease;
 }
 
 footer a { 
     color: var(--link-color); 
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
 footer a:hover {

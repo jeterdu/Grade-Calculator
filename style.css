@@ -1,10 +1,11 @@
+/* Base Body and Typography inspired by iOS */
 body {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    line-height: 1.5;
     margin: 0;
     padding: 0; 
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: #f0f2f5; /* iOS light gray background */
+    color: #1c1c1e; /* iOS primary text color */
     display: flex;
     flex-direction: column; 
     align-items: center; 
@@ -12,162 +13,269 @@ body {
 }
 
 .container {
-    background: #fff;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    background: #ffffff; /* iOS content background */
+    padding: 20px;
+    border-radius: 12px; /* iOS style rounded corners */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* iOS subtle shadow */
     width: 100%;
-    max-width: 650px;
+    max-width: 650px; /* Kept user's max-width */
     margin-top: 20px; 
     margin-bottom: 20px; 
     box-sizing: border-box;
 }
 
+/* Headings - iOS inspired sizing and weight */
 h1 {
+    font-size: 28px;
+    font-weight: 600; /* Semibold */
     text-align: center;
-    color: #333;
-    margin-bottom: 20px;
+    color: #1c1c1e;
+    margin-top: 10px;
+    margin-bottom: 25px;
 }
 
-h2, h3, legend {
-    color: #555;
-    margin-top: 20px;
-    margin-bottom: 10px;
+h2 { /* For "輸入各項成績" */
+    font-size: 20px;
+    font-weight: 600;
+    color: #1c1c1e;
+    margin-top: 25px;
+    margin-bottom: 15px;
     display: flex; 
     align-items: center; 
 }
-legend {
-    font-weight: bold;
-    color: #333;
-    padding: 0 5px;
+
+h3 { /* For "計算結果" */
+    font-size: 17px;
+    font-weight: 600;
+    color: #3c3c43; /* Slightly muted for sub-section */
+    margin-top: 25px;
+    margin-bottom: 15px;
+    display: flex; 
+    align-items: center; 
 }
 
+legend { /* For Fieldset titles */
+    font-size: 15px; /* iOS Form Group Title */
+    font-weight: 400; /* Regular weight for legend, often less prominent */
+    color: #636366;   /* iOS secondary label color */
+    padding: 0 2px;
+    margin-bottom: 8px; /* Space below legend, before first item */
+    margin-left: 13px; /* Indent legend to align with cell content */
+    text-transform: uppercase; /* iOS often uses uppercase for these */
+    display: flex; 
+    align-items: center; 
+}
 
+/* Options Grouping - Fieldset like iOS grouped table view */
 .options-group {
     display: flex;
     flex-direction: column;
-    gap: 15px; 
-    margin-bottom: 20px;
+    gap: 25px; /* Increased gap between fieldsets */
+    margin-bottom: 25px;
 }
 
 fieldset {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px 15px; 
+    border: none; 
+    border-radius: 10px; 
+    padding: 0; 
+    margin: 0; /* Remove default fieldset margin */
+    background-color: #ffffff; 
+    box-shadow: 0 1px 1px rgba(0,0,0,0.03); /* Very subtle shadow for depth */
 }
 
-.options-group div, .score-item {
-    margin-bottom: 10px;
+/* Styling for each item within a fieldset (radio button rows) */
+.options-group div {
+    margin-bottom: 0; /* Remove bottom margin as border will separate */
+    padding: 11px 15px; /* iOS cell-like padding */
+    display: flex; /* To align radio and label */
+    align-items: center;
 }
 
-.options-group label, .score-item label {
-    margin-left: 5px;
+.options-group div:not(:last-child) {
+    border-bottom: 1px solid #c6c6c8; /* iOS separator line, adjusted from #e5e5e5 */
+}
+
+.options-group label, .score-item label { /* General labels */
+    margin-left: 0; /* Will be controlled by radio margin or specific item layout */
     cursor: pointer;
-    color: #444; 
+    font-size: 16px;
+    color: #1c1c1e; 
 }
 
+/* Score input items */
 .score-item {
     display: flex;
     align-items: center;
     gap: 10px;
     flex-wrap: wrap; 
+    padding: 8px 15px; /* Add padding consistent with fieldset items */
+    background-color: #ffffff; /* White background for score items if container isn't white */
+}
+.scores-input { /* Container for score items, style like a fieldset */
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding-top: 5px; /* Space for h2 if it's inside */
+    padding-bottom: 5px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.03);
+}
+.scores-input h2 {
+    margin-left: 15px; /* Indent h2 similar to legend */
+    margin-bottom: 8px;
+    margin-top: 15px;
 }
 
+.score-item:not(:last-child) {
+    border-bottom: 1px solid #c6c6c8;
+}
+
+
 .score-item label {
-    flex-basis: 180px; 
+    flex-basis: 170px; 
     flex-shrink: 0;
 }
 
+/* Input Number - iOS style */
 input[type="number"] {
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    width: 100px;
+    padding: 10px 12px;
+    border: 1px solid #c6c6c8;
+    border-radius: 8px;
+    width: 100px; 
     box-sizing: border-box;
-    font-size: 1em; 
+    font-size: 16px; 
+    background-color: #f0f2f5; /* Or #ffffff for a flatter look inside white cells */
+    color: #1c1c1e;
+    text-align: right; /* Numbers often right-aligned */
+}
+input[type="number"]:focus { 
+    border-color: #007AFF;
+    outline: none; 
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3); 
 }
 
+/* Custom Radio Buttons - iOS style */
 input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid #c6c6c8;
+    border-radius: 50%;
+    position: relative;
+    outline: none;
+    margin-right: 12px; /* Spacing from label text */
+    vertical-align: middle;
+    flex-shrink: 0; /* Prevent shrinking */
     cursor: pointer;
-    margin-right: 3px;
+}
+input[type="radio"]:checked {
+    border-color: #007AFF;
+    background-color: #007AFF; 
+}
+input[type="radio"]:checked::after { 
+    content: '';
+    display: block;
+    width: 10px; 
+    height: 10px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+/* Ensure label in radio group is clickable and aligned */
+.options-group div > label { /* Target label directly inside the div */
+    flex-grow: 1; /* Allow label to take remaining space */
 }
 
+
+/* Buttons - iOS style */
 button {
     display: inline-block;
-    background-color: #5cb85c;
-    color: white;
-    padding: 10px 18px; 
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
-    margin-top: 20px;
+    font-size: 17px; /* iOS button text size */
+    font-weight: 600; /* Semibold for primary, Medium for others */
+    padding: 12px 20px;
+    margin-top: 25px; /* Increased margin-top */
     margin-right: 10px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s ease, opacity 0.2s ease; /* Added opacity transition */
+    text-align: center;
+    min-width: 100px; /* Minimum width for better touch target */
+}
+button:active { /* Pressed state */
+    opacity: 0.7;
 }
 
-button:hover {
-    background-color: #4cae4c;
+#calculateButton {
+    background-color: #007AFF; /* iOS Blue */
+    color: white;
+}
+#calculateButton:hover {
+    background-color: #0056b3; /* Darker blue */
 }
 
-#clearButton {
-    background-color: #f0ad4e;
+#clearButton, #copyResultsButton { /* iOS Gray/Tinted Button Style */
+    background-color: #e5e5ea; 
+    color: #007AFF; 
+    font-weight: 500; /* Medium weight */
 }
-#clearButton:hover {
-    background-color: #eea236;
-}
-#copyResultsButton {
-    background-color: #5bc0de;
-}
-#copyResultsButton:hover {
-    background-color: #46b8da;
+#clearButton:hover, #copyResultsButton:hover {
+    background-color: #d1d1d6; 
 }
 
 
+/* Results Output Area */
 .results-output {
-    margin-top: 20px;
+    margin-top: 25px;
     padding: 15px;
-    background-color: #e9f5e9;
-    border: 1px solid #d0e9c6;
-    border-radius: 5px;
+    background-color: transparent; /* Make it blend with container or have its own card style */
+    border: none; 
+    border-radius: 8px; /* Consistent rounding */
+}
+.results-output h3 { /* Make result heading distinct */
+    margin-left: 0; /* Align with result items */
+    padding-left: 0;
 }
 
 .result-item {
-    margin-bottom: 10px; 
-    font-size: 1.1em;
+    margin-bottom: 12px; 
+    font-size: 1.05em; /* Slightly adjusted */
     line-height: 1.5; 
+    padding: 8px 0; /* Add some padding for better spacing if lines are long */
 }
 
-#statusResult.pass { color: green; font-weight: bold;}
-#statusResult.makeup { color: orange; font-weight: bold;}
-#statusResult.fail { color: red; font-weight: bold;}
+/* Status Colors - iOS Semantic Colors */
+#statusResult.pass { color: #34C759; font-weight: 600;} 
+#statusResult.makeup { color: #FF9500; font-weight: 600;} 
+#statusResult.fail { color: #FF3B30; font-weight: 600;} 
 
-/* All tooltip styles have been removed */
 
 #totalGradeResult, #statusResult, #neededResult, #copyResultsButton {
-    display: none;
+    display: none; /* Initial state, JS will control visibility */
 }
 
-/* --- Footer Styles --- */
+/* Footer Styles - iOS Inspired */
 footer {
     text-align: center; 
     margin-top: 30px;   
     padding: 20px 15px; 
-    border-top: 1px solid #e0e0e0; 
+    border-top: 1px solid #d1d1d6; /* iOS separator color */
     width: 100%; 
     box-sizing: border-box; 
-    background-color: #f9f9f9; 
+    background-color: #f0f2f5; /* Consistent with body background */
 }
 
 footer p {
-    font-size: 0.85em;  
-    color: #666;      
-    margin: 6px 0;     
-    line-height: 1.6;  
+    font-size: 13px;  
+    color: #8a8a8e; /* iOS secondary/footnote text color */
+    margin: 4px 0;     
+    line-height: 1.4;  
 }
 
 footer a { 
-    color: #007bff;
+    color: #007AFF; /* iOS link blue */
     text-decoration: none;
 }
 

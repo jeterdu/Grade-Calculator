@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>學期成績計算機 (進階版)</title>
-    <link rel="stylesheet" href="style.css">
+    <title>學期成績計算機 (進階版 v1.4.0)</title> <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
@@ -31,38 +30,47 @@
                 </div>
                 <div>
                     <input type="radio" id="modeNeeded" name="calculationMode" value="needed">
-                    <label for="modeNeeded">計算三段段考所需分數 (多目標)</label> </div>
+                    <label for="modeNeeded">計算三段段考所需分數 (多目標)</label>
+                </div>
             </fieldset>
         </div>
         
         <div id="customTargetInputContainer" class="score-item" style="display: none;">
-            <label for="customTargetGrade">您的自訂總成績目標：</label> <input type="number" id="customTargetGrade" min="0" max="100" value="70"> </div>
+            <label for="customTargetGrade">您的自訂總成績目標：</label>
+            <input type="number" id="customTargetGrade" min="0" max="100" value="70" placeholder="0-100">
+        </div>
 
         <div class="scores-input">
             <h2>輸入各項成績 (0-100)</h2>
             <div class="score-item">
                 <label for="s_p1">一段平時成績：</label>
                 <input type="number" id="s_p1" min="0" max="100" placeholder="0-100">
+                <span class="error-message" id="error_s_p1"></span>
             </div>
             <div class="score-item">
                 <label for="s_e1">一段段考成績：</label>
                 <input type="number" id="s_e1" min="0" max="100" placeholder="0-100">
+                <span class="error-message" id="error_s_e1"></span>
             </div>
             <div class="score-item">
                 <label for="s_p2">二段平時成績：</label>
                 <input type="number" id="s_p2" min="0" max="100" placeholder="0-100">
+                <span class="error-message" id="error_s_p2"></span>
             </div>
             <div class="score-item">
                 <label for="s_e2">二段段考成績：</label>
                 <input type="number" id="s_e2" min="0" max="100" placeholder="0-100">
+                <span class="error-message" id="error_s_e2"></span>
             </div>
             <div class="score-item">
                 <label for="s_p3">三段平時成績：</label>
                 <input type="number" id="s_p3" min="0" max="100" placeholder="0-100">
+                <span class="error-message" id="error_s_p3"></span>
             </div>
             <div class="score-item" id="s_e3_item">
                 <label for="s_e3">三段段考成績：</label>
                 <input type="number" id="s_e3" min="0" max="100" placeholder="0-100">
+                <span class="error-message" id="error_s_e3"></span>
             </div>
         </div>
 
@@ -74,11 +82,12 @@
             <h3>計算結果：</h3>
             <div id="totalGradeResult" class="result-item"></div>
             <div id="statusResult" class="result-item"></div>
-            <div id="neededResult" class="result-item"></div> </div>
-    </div>
+            <div id="neededResult" class="result-item"></div> 
+        </div>
+    </div> 
 
     <footer>
-        <p>版本 1.3.1 (2025-05-08)</p>
+        <p>版本 1.4.0 (2025-05-08)</p>
         <p>本工具 由Jeter Du開發設計</p>
         <p>由Randy Chxng & Hardy Tsai 功能發想、測試</p>
         <p>本工具誕生於2025/01/09</p>

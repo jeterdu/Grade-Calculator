@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
         s_p3_input: document.getElementById('s_p3'),
         s_e3_input: document.getElementById('s_e3'),
         s_e3_item_div: document.getElementById('s_e3_item'),
-        weightSchemeRadios: document.getElementsByName('weightScheme'), // This is a NodeList
-        calculationModeRadios: document.getElementsByName('calculationMode'), // This is a NodeList
+        weightSchemeRadios: document.getElementsByName('weightScheme'),
+        calculationModeRadios: document.getElementsByName('calculationMode'),
         customTargetInputContainer: document.getElementById('customTargetInputContainer'),
         customTargetGradeInput: document.getElementById('customTargetGrade'),
         calculateButton: document.getElementById('calculateButton'),
@@ -23,30 +23,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let essentialElementsPresent = true;
     for (const key in elements) {
         if (elements.hasOwnProperty(key)) {
-            // NodeLists (like for radio buttons) can be empty but not null if the name exists.
-            // We check for null only for getElementById results primarily.
             if (!elements[key] && key !== 'weightSchemeRadios' && key !== 'calculationModeRadios') {
                 console.error(`Error: HTML element with ID or reference '${key}' not found.`);
                 essentialElementsPresent = false;
             } else if ((key === 'weightSchemeRadios' || key === 'calculationModeRadios') && elements[key].length === 0) {
                 console.error(`Error: No elements found for radio button group '${key}'.`);
-                // This might not be critical if defaults are handled, but good to note.
             }
         }
     }
 
     if (!essentialElementsPresent) {
         alert("網頁初始化錯誤：缺少必要的 HTML 元件。請檢查 Console 獲取更多資訊。功能可能無法正常運作。");
-        // You might choose to return here to prevent further script execution if critical elements are missing
-        // return; 
     }
 
     // --- Feature 1: Remember Weighting Scheme ---
     function loadSavedWeightScheme() {
         try {
             const savedScheme = localStorage.getItem('gradeCalc_weightScheme');
-            const defaultWeightRadio = elements.s_p1_input ? document.getElementById('weightScheme1') : null; // Use an existing element check
-
+            const defaultWeightRadio = elements.s_p1_input ? document.getElementById('weightScheme1') : null; 
             let schemeApplied = false;
             if (savedScheme && elements.weightSchemeRadios) {
                 for (let i = 0; i < elements.weightSchemeRadios.length; i++) {
@@ -70,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveWeightScheme() {
         try {
             const selectedScheme = getSelectedWeightScheme();
-            if (selectedScheme) { // Ensure there's a scheme to save
+            if (selectedScheme) {
                 localStorage.setItem('gradeCalc_weightScheme', selectedScheme);
             }
         } catch (e) {
@@ -84,48 +78,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function getSelectedRadioValue(name) {
-        const radios = document.getElementsByName(name); // Get live NodeList
+        const radios = document.getElementsByName(name);
         for (let i = 0; i < radios.length; i++) {
             if (radios[i].checked) {
                 return radios[i].value;
             }
         }
-        return null; // Return null if no radio is checked
+        const defaultRadio = document.querySelector(`input[name="${name}"][checked]`);
+        return defaultRadio ? defaultRadio.value : (name === 'weightScheme' ? '64' : 'total'); // Provide defaults
     }
     
-    function getSelectedWeightScheme() { return getSelectedRadioValue('weightScheme') || "64"; } // Default to "64"
-    function getSelectedCalculationMode() { return getSelectedRadioValue('calculationMode') || "total"; } // Default to "total"
+    function getSelectedWeightScheme() { return getSelectedRadioValue('weightScheme'); }
+    function getSelectedCalculationMode() { return getSelectedRadioValue('calculationMode'); }
 
-    // --- UI Updates based on Mode ---
     function updateUIForMode() {
         const mode = getSelectedCalculationMode();
         clearResultsAndHide(); 
 
-        if (elements.s_e3_item_div && elements.customTargetInputContainer && 
-            elements.totalGradeResultDiv && elements.statusResultDiv && elements.neededResultDiv) {
+        if (elements.s_e3_item_div && elements.customTargetInputContainer) {
             if (mode === 'total') {
                 elements.s_e3_item_div.style.display = 'flex';
                 elements.customTargetInputContainer.style.display = 'none';
-                // Results divs are shown by calculateAndDisplay
             } else { // mode === 'needed'
                 elements.s_e3_item_div.style.display = 'none';
                 elements.customTargetInputContainer.style.display = 'flex';
             }
         } else {
-            console.error("Cannot update UI for mode: one or more critical UI elements are missing.");
+            console.error("Cannot update UI for mode: s_e3_item_div or customTargetInputContainer is missing.");
         }
     }
 
     if (elements.calculationModeRadios && elements.calculationModeRadios.length > 0) {
         elements.calculationModeRadios.forEach(radio => radio.addEventListener('change', updateUIForMode));
-        // Initial UI setup call (ensure it's safe)
-        // The controversial dispatchEvent is removed. Direct call to updateUIForMode is preferred.
         updateUIForMode(); 
     }
 
-
     function getScores() {
-        // Use the elements from the 'elements' object for safety
         return {
             p1: parseFloat(elements.s_p1_input ? elements.s_p1_input.value : 0) || 0,
             e1: parseFloat(elements.s_e1_input ? elements.s_e1_input.value : 0) || 0,
@@ -136,6 +124,18 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
     
+    // Helper function for calculating needed score text
+    function getNeededScoreText(targetGrade, knownUnroundedScoreSum, W_E_each, labelPrefix = "為達總成績") {
+        let neededScore = Math.ceil((targetGrade - 0.5 - knownUnroundedScoreSum) / W_E_each);
+        if (neededScore > 100) {
+            return `${labelPrefix} ${targetGrade} 分：即使三段段考考100分，也無法達到目標。`;
+        } else if (neededScore <= 0) {
+            return `${labelPrefix} ${targetGrade} 分：您已達到此目標標準！`;
+        } else {
+            return `${labelPrefix} ${targetGrade} 分，您的三段段考至少需要 ${neededScore} 分。`;
+        }
+    }
+
     function calculateAndDisplay() {
         try {
             const scores = getScores();
@@ -151,10 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 W_P_each = 0.30 / 3; W_E_each = 0.70 / 3;
             }
             
-            let weightSchemeLabelElement = null;
-            if (elements.weightSchemeRadios && elements.weightSchemeRadios.length > 0) {
-                 weightSchemeLabelElement = document.querySelector(`label[for="weightScheme${weightScheme === '64' ? '1' : '2'}"]`);
-            }
+            let weightSchemeLabelElement = document.querySelector(`label[for="weightScheme${weightScheme === '64' ? '1' : '2'}"]`);
             const weightSchemeText = weightSchemeLabelElement ? weightSchemeLabelElement.textContent.trim() : "未知權重";
 
             let calculationSummary = `權重選擇：${weightSchemeText}\n`;
@@ -178,43 +175,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (finalGrade >= 60) {
                         statusText = "狀態：恭喜過關！"; elements.statusResultDiv.classList.add('pass');
                     } else if (finalGrade >= 40) {
-                        statusText = "狀態：需要補考！"; elements.statusResultDiv.classList.add('makeup');
+                        statusText = "狀態：您可能需要補考！"; elements.statusResultDiv.classList.add('makeup'); // "您可能需要補考"
                     } else {
-                        statusText = "狀態：死當！"; elements.statusResultDiv.classList.add('fail');
+                        statusText = "狀態：您可能會被當！"; elements.statusResultDiv.classList.add('fail'); // "您可能會被當"
                     }
                     elements.statusResultDiv.textContent = statusText;
-                    elements.statusResultDiv.style.display = 'block';
+                    elements.statusResultDiv.style.display = 'block'; // Ensure it's displayed
+                    calculationSummary += `\n計算結果：\n  學期總成績: ${finalGrade}分\n  ${statusText}`; // Add statusText to summary
+                } else {
+                    calculationSummary += `\n計算結果：\n  學期總成績: ${finalGrade}分\n  (狀態顯示元件遺失)`;
                 }
+
                 if (elements.neededResultDiv) elements.neededResultDiv.style.display = 'none';
                 
-                calculationSummary += `\n計算結果：\n  學期總成績: ${finalGrade}分\n  ${elements.statusResultDiv ? elements.statusResultDiv.textContent : ''}`;
 
             } else { // calcMode === 'needed'
-                const customTarget = parseFloat(elements.customTargetGradeInput ? elements.customTargetGradeInput.value : 60) || 60;
-                calculationSummary += `  (計算三段段考所需分數，目標總成績: ${customTarget}分)\n`;
+                const customTarget = parseFloat(elements.customTargetGradeInput ? elements.customTargetGradeInput.value : 70) || 70; // Default custom to 70
+                calculationSummary += `  (計算三段段考所需分數)\n`;
 
                 const knownUnroundedScoreSum = (scores.p1 * W_P_each) + (scores.e1 * W_E_each) +
                                                (scores.p2 * W_P_each) + (scores.e2 * W_E_each) +
                                                (scores.p3 * W_P_each);
                 
-                let neededScore = Math.ceil((customTarget - 0.5 - knownUnroundedScoreSum) / W_E_each);
-                let neededText = "";
+                const neededFor60Text = getNeededScoreText(60, knownUnroundedScoreSum, W_E_each, "為避免補考 (達60分)");
+                const neededFor40Text = getNeededScoreText(40, knownUnroundedScoreSum, W_E_each, "為避免被當 (達40分)");
+                const neededForCustomText = getNeededScoreText(customTarget, knownUnroundedScoreSum, W_E_each, `為達自訂目標 (${customTarget}分)`);
 
-                if (neededScore > 100) {
-                    neededText = `為達總成績 ${customTarget} 分：即使三段段考考100分，也無法達到目標。`;
-                } else if (neededScore <= 0) {
-                    neededText = `為達總成績 ${customTarget} 分：您已達到此目標標準！`;
-                } else {
-                    neededText = `為達總成績 ${customTarget} 分，您的三段段考至少需要 ${neededScore} 分。`;
-                }
                 if (elements.neededResultDiv) {
-                    elements.neededResultDiv.textContent = neededText;
+                    elements.neededResultDiv.innerHTML = `${neededFor60Text}<br>${neededFor40Text}<br>${neededForCustomText}`;
                     elements.neededResultDiv.style.display = 'block';
                 }
+                
+                calculationSummary += `\n計算結果：\n  ${neededFor60Text}\n  ${neededFor40Text}\n  ${neededForCustomText}`;
+                
                 if (elements.totalGradeResultDiv) elements.totalGradeResultDiv.style.display = 'none';
                 if (elements.statusResultDiv) elements.statusResultDiv.style.display = 'none';
-
-                calculationSummary += `\n計算結果：\n  ${neededText}`;
             }
             
             if(elements.copyResultsButton) { 
@@ -225,7 +220,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) {
             console.error("計算或顯示時發生錯誤:", e);
             const errorDisplay = elements.neededResultDiv || elements.totalGradeResultDiv;
-            if(errorDisplay) errorDisplay.textContent = "計算時發生錯誤，請檢查 Console。";
+            if(errorDisplay) {
+                errorDisplay.textContent = "計算時發生錯誤，請檢查 Console。";
+                errorDisplay.style.display = 'block'; // Make sure error is visible
+            }
         }
     }
     
@@ -237,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if(elements.s_e2_input) elements.s_e2_input.value = '';
             if(elements.s_p3_input) elements.s_p3_input.value = ''; 
             if(elements.s_e3_input) elements.s_e3_input.value = '';
-            if(elements.customTargetGradeInput) elements.customTargetGradeInput.value = '60';
+            if(elements.customTargetGradeInput) elements.customTargetGradeInput.value = '70'; // Reset custom target
             clearResultsAndHide();
             updateUIForMode(); 
         } catch (e) {
@@ -248,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function clearResultsAndHide() {
         if(elements.totalGradeResultDiv) { elements.totalGradeResultDiv.textContent = ''; elements.totalGradeResultDiv.style.display = 'none'; }
         if(elements.statusResultDiv) { elements.statusResultDiv.textContent = ''; elements.statusResultDiv.style.display = 'none'; }
-        if(elements.neededResultDiv) { elements.neededResultDiv.textContent = ''; elements.neededResultDiv.style.display = 'none'; }
+        if(elements.neededResultDiv) { elements.neededResultDiv.innerHTML = ''; elements.neededResultDiv.style.display = 'none'; } // Use innerHTML for multi-line
         if(elements.copyResultsButton) {
             elements.copyResultsButton.style.display = 'none';
             elements.copyResultsButton.removeAttribute('data-summary');
@@ -285,6 +283,4 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         // Error already logged by initial check
     }
-
-    // All tooltip JavaScript logic has been removed.
 });

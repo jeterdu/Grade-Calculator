@@ -2,11 +2,11 @@ body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
     margin: 0;
-    padding: 0; /* Remove body padding if footer spans full width */
+    padding: 0; 
     background-color: #f4f4f4;
     color: #333;
     display: flex;
-    flex-direction: column; /* Allow footer to sit below container */
+    flex-direction: column; 
     align-items: center; 
     min-height: 100vh;
 }
@@ -18,8 +18,8 @@ body {
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 650px;
-    margin-top: 20px; /* Add margin to top of container */
-    margin-bottom: 20px; /* Add margin to bottom of container */
+    margin-top: 20px; 
+    margin-bottom: 20px; 
     box-sizing: border-box;
 }
 
@@ -29,13 +29,19 @@ h1 {
     margin-bottom: 20px;
 }
 
-h2, h3 {
+h2, h3, legend { /* Applied legend styling consistency */
     color: #555;
     margin-top: 20px;
     margin-bottom: 10px;
     display: flex; 
     align-items: center; 
 }
+legend { /* Specific to legend as it's not an H tag */
+    font-weight: bold;
+    color: #333;
+    padding: 0 5px; /* Keep original padding */
+}
+
 
 .options-group {
     display: flex;
@@ -48,14 +54,6 @@ fieldset {
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 10px 15px; 
-}
-
-legend {
-    font-weight: bold;
-    color: #333;
-    padding: 0 5px;
-    display: flex; 
-    align-items: center; 
 }
 
 .options-group div, .score-item {
@@ -144,21 +142,44 @@ button:hover {
 #statusResult.makeup { color: orange; font-weight: bold;}
 #statusResult.fail { color: red; font-weight: bold;}
 
-.tooltip {
-    position: relative;
-    cursor: help;
-    font-size: 0.9em;
+/* --- Mobile-Friendly Tooltip Styles --- */
+.tooltip-icon {
+    cursor: pointer;
+    font-size: 0.9em; /* Matched to old .tooltip */
     color: #777;
     margin-left: 8px;
     border: 1px solid #ccc; 
     border-radius: 50%;
-    width: 16px;
-    height: 16px;
+    width: 18px; /* Slightly bigger for touch */
+    height: 18px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     background-color: #f0f0f0;
+    user-select: none; /* Prevent text selection on click */
 }
+
+.tooltip-text-content {
+    display: none; /* Hidden by default */
+    font-size: 0.9em;
+    color: #333;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 8px 10px;
+    margin-top: 5px;
+    /* Position relative to the container if needed, or just flow block */
+    width: fit-content; /* Adjust width to content */
+    max-width: 90%; /* Prevent overly wide tooltips */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    clear: both; /* Ensure it doesn't mess with flex layouts if placed inside flex items */
+}
+/* Specific styling for tooltips inside flex containers like .score-item */
+.input-group-tooltip .tooltip-text-content {
+    flex-basis: 100%; /* Make it take full width in the next line */
+    margin-left: 0; /* Align left */
+}
+
 
 #totalGradeResult, #statusResult, #neededResult, #copyResultsButton {
     display: none;
@@ -168,21 +189,21 @@ button:hover {
 footer {
     text-align: center; 
     margin-top: 30px;   
-    padding: 20px 15px; /* Added horizontal padding */
+    padding: 20px 15px; 
     border-top: 1px solid #e0e0e0; 
-    width: 100%; /* Make footer span full width */
-    box-sizing: border-box; /* Include padding in width */
-    background-color: #f9f9f9; /* Optional: slight background for footer */
+    width: 100%; 
+    box-sizing: border-box; 
+    background-color: #f9f9f9; 
 }
 
 footer p {
-    font-size: 0.85em;  /* Slightly larger for readability */
-    color: #666;      /* Slightly darker grey */
+    font-size: 0.85em;  
+    color: #666;      
     margin: 6px 0;     
     line-height: 1.6;  
 }
 
-footer a { /* Style for the link in footer */
+footer a { 
     color: #007bff;
     text-decoration: none;
 }
@@ -190,11 +211,3 @@ footer a { /* Style for the link in footer */
 footer a:hover {
     text-decoration: underline;
 }
-
-/* No specific style needed for .footer-separator if using separate <p> tags like above */
-/* If using spans with separators, you might uncomment and adjust this:
-.footer-separator {
-    margin: 0 10px;     
-    color: #ccc;        
-}
-*/

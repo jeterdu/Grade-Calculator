@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Element Selection and Validation ---
+    // Theme toggle button REMOVED from elements
     const elements = {
-        themeToggleButton: document.getElementById('themeToggleButton'), // New
         s_p1_input: document.getElementById('s_p1'),
         s_e1_input: document.getElementById('s_e1'),
         s_p2_input: document.getElementById('s_p2'),
@@ -41,59 +41,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    if (!essentialElementsPresent && !elements.themeToggleButton) { // Allow theme button to be missing without breaking core
-         console.warn("網頁初始化警告：部分 HTML 元件可能遺失。");
+    if (!essentialElementsPresent) {
+        alert("網頁初始化錯誤：缺少必要的 HTML 元件。請檢查 Console 獲取更多資訊。功能可能無法正常運作。");
     }
 
-
-    // --- THEME TOGGLE ---
-    const themeLocalStorageKey = 'gradeCalc_theme';
-    const sunIcon = '☀️';
-    const moonIcon = '🌙';
-
-    function applyTheme(theme) {
-        if (theme === 'dark') {
-            document.body.classList.add('dark-theme');
-            if (elements.themeToggleButton) elements.themeToggleButton.textContent = sunIcon;
-        } else {
-            document.body.classList.remove('dark-theme');
-            if (elements.themeToggleButton) elements.themeToggleButton.textContent = moonIcon;
-        }
-        try {
-            localStorage.setItem(themeLocalStorageKey, theme);
-        } catch (e) {
-            console.error("Error saving theme to localStorage:", e);
-        }
-    }
-
-    function toggleTheme() {
-        const isDark = document.body.classList.contains('dark-theme');
-        applyTheme(isDark ? 'light' : 'dark');
-    }
-
-    function initializeTheme() {
-        const savedTheme = localStorage.getItem(themeLocalStorageKey);
-        if (savedTheme) {
-            applyTheme(savedTheme);
-        } else {
-            // Default to system preference if no saved theme
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                applyTheme('dark');
-            } else {
-                applyTheme('light'); // Default to light if no system preference or no saved theme
-            }
-        }
-    }
-
-    if (elements.themeToggleButton) {
-        elements.themeToggleButton.addEventListener('click', toggleTheme);
-    }
-    initializeTheme(); // Set initial theme
-
+    // --- THEME TOGGLE Logic REMOVED ---
+    // const themeLocalStorageKey = 'gradeCalc_theme';
+    // const sunIcon = '☀️';
+    // const moonIcon = '🌙';
+    // function applyTheme(theme) { ... }
+    // function toggleTheme() { ... }
+    // function initializeTheme() { ... }
+    // Event listener for themeToggleButton REMOVED
 
     // --- Feature: Remember Weighting Scheme (localStorage) ---
     function loadSavedWeightScheme() {
-        // ... (same as previous version)
         try {
             const savedScheme = localStorage.getItem('gradeCalc_weightScheme');
             const defaultWeightRadioId = (elements.weightSchemeRadios && elements.weightSchemeRadios.length > 0) ? elements.weightSchemeRadios[0].id : 'weightScheme1';
@@ -107,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
-            if (!schemeApplied) {
+             if (!schemeApplied) {
                  const defaultRadioElem = document.getElementById(defaultWeightRadioId);
                  if(defaultRadioElem) defaultRadioElem.checked = true;
                  else if(elements.weightSchemeRadios && elements.weightSchemeRadios.length > 0) elements.weightSchemeRadios[0].checked = true;
@@ -119,7 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function saveWeightScheme() {
-        // ... (same as previous version)
         try {
             const selectedScheme = getSelectedWeightScheme();
             if (selectedScheme) {
@@ -158,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const savedValue = localStorage.getItem(scoreLocalStoragePrefix + idSuffix);
                     if (savedValue !== null) {
                         inputElement.value = savedValue;
+                        // Validate loaded score visually
                         validateScoreInput(inputElement, elements[`error_${idSuffix}`]); 
                     }
                 } catch (e) {
@@ -208,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // Attach event listeners for saving scores and validation AFTER loadScores
     if (essentialElementsPresent) {
         scoreInputIds.forEach(idSuffix => {
             const inputElement = elements[idSuffix + '_input'];
@@ -225,7 +188,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Helper Functions ---
     function getSelectedRadioValue(name) {
-        // ... (same as previous, but ensure default return if elements.radios is an empty NodeList initially)
         const radios = document.getElementsByName(name);
         if (radios && radios.length > 0) {
             for (let i = 0; i < radios.length; i++) {
@@ -233,11 +195,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     return radios[i].value;
                 }
             }
-            // If no radio is checked, return the value of the first one (which should be checked by default in HTML)
-            // or a hardcoded default.
-            return radios[0].value; 
+            // Fallback if no radio is initially checked 
+             if(radios[0]) return radios[0].value;
         }
-        // Fallback if no radio buttons with that name exist at all (should not happen)
         return (name === 'weightScheme') ? '64' : 'total';
     }
     
@@ -246,7 +206,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- UI Updates based on Mode ---
     function updateUIForMode() {
-        // ... (same as previous)
         const mode = getSelectedCalculationMode();
         clearResultsAndHide(); 
 
@@ -259,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 elements.customTargetInputContainer.style.display = 'flex';
             }
         } else {
-            // console.error("Cannot update UI for mode: s_e3_item_div or customTargetInputContainer is missing.");
+            console.error("Cannot update UI for mode: s_e3_item_div or customTargetInputContainer is missing.");
         }
     }
 
@@ -271,7 +230,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Score Retrieval ---
     function getScores() {
-        // ... (same as previous)
         return {
             p1: parseFloat(elements.s_p1_input ? elements.s_p1_input.value : 0) || 0,
             e1: parseFloat(elements.s_e1_input ? elements.s_e1_input.value : 0) || 0,
@@ -284,7 +242,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- Needed Score Text Helper ---
     function getNeededScoreText(targetGrade, knownUnroundedScoreSum, W_E_each, labelPrefix = "為達總成績") {
-        // ... (same as previous)
         let neededScore = Math.ceil((targetGrade - 0.5 - knownUnroundedScoreSum) / W_E_each);
         if (neededScore > 100) {
             return `${labelPrefix} ${targetGrade} 分：即使三段段考考100分，也無法達到目標。`;
@@ -297,7 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Main Calculation and Display ---
     function calculateAndDisplay() {
-        // ... (same as previous, with added validation check at the beginning)
         if (!essentialElementsPresent) {
             alert("部分網頁元件遺失，無法執行計算。請檢查 Console。");
             return;
@@ -307,19 +263,18 @@ document.addEventListener('DOMContentLoaded', () => {
             scoreInputIds.forEach(idSuffix => {
                 const inputElement = elements[idSuffix + '_input'];
                 const errorElement = elements[`error_${idSuffix}`];
-                if (!validateScoreInput(inputElement, errorElement) && inputElement && inputElement.value.trim() !== "") {
+                // Only consider non-empty fields for blocking calculation based on validation
+                if (inputElement && inputElement.value.trim() !== "" && !validateScoreInput(inputElement, errorElement)) {
                     allInputsProgrammaticallyValid = false;
                 }
             });
 
             if (!allInputsProgrammaticallyValid) {
-                // Error messages are already displayed by validateScoreInput
-                // Optionally, you can add a general alert or prevent calculation results from showing
-                if(elements.totalGradeResultDiv) elements.totalGradeResultDiv.style.display = 'none';
-                if(elements.statusResultDiv) elements.statusResultDiv.style.display = 'none';
-                if(elements.neededResultDiv) elements.neededResultDiv.style.display = 'none';
-                if(elements.copyResultsButton) elements.copyResultsButton.style.display = 'none';
-                return;
+                // Optionally alert user, or just rely on visual cues
+                // alert("部分成績輸入無效 (例如超出0-100範圍)，請修正紅色提示的欄位後再計算。"); 
+                // Clear results if invalid inputs are present and calculation is blocked
+                 clearResultsAndHide();
+                return; 
             }
 
             const scores = getScores();
@@ -415,7 +370,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- Clear Functions ---
     function clearInputsAndResults() {
-        // ... (same as previous, ensure it calls localStorage.removeItem for scores)
         if (!essentialElementsPresent && !elements.s_p1_input) { 
              console.warn("Clear function called but essential elements might be missing.");
         }
@@ -447,7 +401,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function clearResultsAndHide() {
-        // ... (same as previous)
         if(elements.totalGradeResultDiv) { elements.totalGradeResultDiv.textContent = ''; elements.totalGradeResultDiv.style.display = 'none'; }
         if(elements.statusResultDiv) { elements.statusResultDiv.textContent = ''; elements.statusResultDiv.style.display = 'none'; }
         if(elements.neededResultDiv) { elements.neededResultDiv.innerHTML = ''; elements.neededResultDiv.style.display = 'none'; }
@@ -460,7 +413,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Event Listeners for Buttons ---
     if (elements.copyResultsButton) {
         elements.copyResultsButton.addEventListener('click', () => {
-            // ... (same as previous)
             const summaryToCopy = elements.copyResultsButton.getAttribute('data-summary');
             if (summaryToCopy && navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(summaryToCopy)

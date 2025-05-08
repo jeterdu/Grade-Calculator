@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Element Selection and Validation ---
     const elements = {
+        themeToggleButton: document.getElementById('themeToggleButton'), // New
         s_p1_input: document.getElementById('s_p1'),
         s_e1_input: document.getElementById('s_e1'),
         s_p2_input: document.getElementById('s_p2'),
@@ -36,21 +37,66 @@ document.addEventListener('DOMContentLoaded', () => {
                 essentialElementsPresent = false;
             } else if ((key === 'weightSchemeRadios' || key === 'calculationModeRadios') && elements[key].length === 0) {
                 console.error(`Error: No elements found for radio button group '${key}'.`);
-                // This might not be critical if defaults are handled, but good to note.
             }
         }
     }
 
-    if (!essentialElementsPresent) {
-        alert("網頁初始化錯誤：缺少必要的 HTML 元件。請檢查 Console 獲取更多資訊。功能可能無法正常運作。");
+    if (!essentialElementsPresent && !elements.themeToggleButton) { // Allow theme button to be missing without breaking core
+         console.warn("網頁初始化警告：部分 HTML 元件可能遺失。");
     }
+
+
+    // --- THEME TOGGLE ---
+    const themeLocalStorageKey = 'gradeCalc_theme';
+    const sunIcon = '☀️';
+    const moonIcon = '🌙';
+
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            document.body.classList.add('dark-theme');
+            if (elements.themeToggleButton) elements.themeToggleButton.textContent = sunIcon;
+        } else {
+            document.body.classList.remove('dark-theme');
+            if (elements.themeToggleButton) elements.themeToggleButton.textContent = moonIcon;
+        }
+        try {
+            localStorage.setItem(themeLocalStorageKey, theme);
+        } catch (e) {
+            console.error("Error saving theme to localStorage:", e);
+        }
+    }
+
+    function toggleTheme() {
+        const isDark = document.body.classList.contains('dark-theme');
+        applyTheme(isDark ? 'light' : 'dark');
+    }
+
+    function initializeTheme() {
+        const savedTheme = localStorage.getItem(themeLocalStorageKey);
+        if (savedTheme) {
+            applyTheme(savedTheme);
+        } else {
+            // Default to system preference if no saved theme
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                applyTheme('dark');
+            } else {
+                applyTheme('light'); // Default to light if no system preference or no saved theme
+            }
+        }
+    }
+
+    if (elements.themeToggleButton) {
+        elements.themeToggleButton.addEventListener('click', toggleTheme);
+    }
+    initializeTheme(); // Set initial theme
+
 
     // --- Feature: Remember Weighting Scheme (localStorage) ---
     function loadSavedWeightScheme() {
+        // ... (same as previous version)
         try {
             const savedScheme = localStorage.getItem('gradeCalc_weightScheme');
-            // Ensure elements.weightSchemeRadios itself is not null before trying to access its members or length
-            const defaultWeightRadio = elements.weightSchemeRadios && elements.weightSchemeRadios.length > 0 ? elements.weightSchemeRadios[0].labels[0].htmlFor : 'weightScheme1';
+            const defaultWeightRadioId = (elements.weightSchemeRadios && elements.weightSchemeRadios.length > 0) ? elements.weightSchemeRadios[0].id : 'weightScheme1';
             let schemeApplied = false;
             if (savedScheme && elements.weightSchemeRadios) {
                 for (let i = 0; i < elements.weightSchemeRadios.length; i++) {
@@ -62,9 +108,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             if (!schemeApplied) {
-                 const defaultRadioElem = document.getElementById(defaultWeightRadio);
+                 const defaultRadioElem = document.getElementById(defaultWeightRadioId);
                  if(defaultRadioElem) defaultRadioElem.checked = true;
-                 else if(elements.weightSchemeRadios && elements.weightSchemeRadios.length > 0) elements.weightSchemeRadios[0].checked = true; // Fallback
+                 else if(elements.weightSchemeRadios && elements.weightSchemeRadios.length > 0) elements.weightSchemeRadios[0].checked = true;
             }
         } catch (e) {
             console.error("Error loading weight scheme:", e);
@@ -73,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function saveWeightScheme() {
+        // ... (same as previous version)
         try {
             const selectedScheme = getSelectedWeightScheme();
             if (selectedScheme) {
@@ -85,13 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (elements.weightSchemeRadios && elements.weightSchemeRadios.length > 0) {
         elements.weightSchemeRadios.forEach(radio => radio.addEventListener('change', saveWeightScheme));
-        loadSavedWeightScheme();
+        if (essentialElementsPresent) loadSavedWeightScheme();
     }
 
     // --- Feature: Save/Load All Entered Scores (localStorage) ---
     const scoreLocalStoragePrefix = 'gradeCalc_score_';
 
-    function saveScore(inputIdSuffix) { // Renamed parameter for clarity
+    function saveScore(inputIdSuffix) { 
         const inputElement = elements[inputIdSuffix + '_input'];
         if (inputElement) {
             try {
@@ -103,8 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function loadScores() {
-        scoreInputIds.forEach(idSuffix => {
-            const inputKey = idSuffix + '_input';
+        scoreInputIds.forEach(idSuffix => { 
+            const inputKey = idSuffix + '_input'; 
             const inputElement = elements[inputKey];
             if (inputElement) {
                 try {
@@ -122,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- Feature: Input Validation and Hints ---
     function validateScoreInput(inputElement, errorElement) {
-        if (!inputElement) return true; // Should not happen if initial check passed, consider it valid
+        if (!inputElement) return true; 
 
         const value = parseFloat(inputElement.value);
         let errorMessage = "";
@@ -161,35 +208,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Attach event listeners for saving scores and validation AFTER loadScores
-    scoreInputIds.forEach(idSuffix => {
-        const inputElement = elements[idSuffix + '_input'];
-        const errorElement = elements[`error_${idSuffix}`];
-        if (inputElement) {
-            inputElement.addEventListener('input', () => {
-                validateScoreInput(inputElement, errorElement);
-                saveScore(idSuffix);
-            });
-        }
-    });
-
-    if(essentialElementsPresent) { // Only load scores if elements are there
+    if (essentialElementsPresent) {
+        scoreInputIds.forEach(idSuffix => {
+            const inputElement = elements[idSuffix + '_input'];
+            const errorElement = elements[`error_${idSuffix}`];
+            if (inputElement) {
+                inputElement.addEventListener('input', () => {
+                    validateScoreInput(inputElement, errorElement);
+                    saveScore(idSuffix);
+                });
+            }
+        });
         loadScores(); 
     }
 
 
     // --- Helper Functions ---
     function getSelectedRadioValue(name) {
-        const radios = document.getElementsByName(name); 
-        for (let i = 0; i < radios.length; i++) {
-            if (radios[i].checked) {
-                return radios[i].value;
+        // ... (same as previous, but ensure default return if elements.radios is an empty NodeList initially)
+        const radios = document.getElementsByName(name);
+        if (radios && radios.length > 0) {
+            for (let i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    return radios[i].value;
+                }
             }
+            // If no radio is checked, return the value of the first one (which should be checked by default in HTML)
+            // or a hardcoded default.
+            return radios[0].value; 
         }
-        // Fallback for initial load if no radio is 'checked' in HTML (though it should be)
-        if (name === 'weightScheme') return '64';
-        if (name === 'calculationMode') return 'total';
-        return null;
+        // Fallback if no radio buttons with that name exist at all (should not happen)
+        return (name === 'weightScheme') ? '64' : 'total';
     }
     
     function getSelectedWeightScheme() { return getSelectedRadioValue('weightScheme'); }
@@ -197,6 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- UI Updates based on Mode ---
     function updateUIForMode() {
+        // ... (same as previous)
         const mode = getSelectedCalculationMode();
         clearResultsAndHide(); 
 
@@ -209,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 elements.customTargetInputContainer.style.display = 'flex';
             }
         } else {
-            console.error("Cannot update UI for mode: s_e3_item_div or customTargetInputContainer is missing.");
+            // console.error("Cannot update UI for mode: s_e3_item_div or customTargetInputContainer is missing.");
         }
     }
 
@@ -221,6 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Score Retrieval ---
     function getScores() {
+        // ... (same as previous)
         return {
             p1: parseFloat(elements.s_p1_input ? elements.s_p1_input.value : 0) || 0,
             e1: parseFloat(elements.s_e1_input ? elements.s_e1_input.value : 0) || 0,
@@ -233,6 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- Needed Score Text Helper ---
     function getNeededScoreText(targetGrade, knownUnroundedScoreSum, W_E_each, labelPrefix = "為達總成績") {
+        // ... (same as previous)
         let neededScore = Math.ceil((targetGrade - 0.5 - knownUnroundedScoreSum) / W_E_each);
         if (neededScore > 100) {
             return `${labelPrefix} ${targetGrade} 分：即使三段段考考100分，也無法達到目標。`;
@@ -245,6 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Main Calculation and Display ---
     function calculateAndDisplay() {
+        // ... (same as previous, with added validation check at the beginning)
         if (!essentialElementsPresent) {
             alert("部分網頁元件遺失，無法執行計算。請檢查 Console。");
             return;
@@ -260,7 +313,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (!allInputsProgrammaticallyValid) {
-                alert("部分成績輸入無效 (例如超出0-100範圍)，請修正紅色提示的欄位後再計算。");
+                // Error messages are already displayed by validateScoreInput
+                // Optionally, you can add a general alert or prevent calculation results from showing
+                if(elements.totalGradeResultDiv) elements.totalGradeResultDiv.style.display = 'none';
+                if(elements.statusResultDiv) elements.statusResultDiv.style.display = 'none';
+                if(elements.neededResultDiv) elements.neededResultDiv.style.display = 'none';
+                if(elements.copyResultsButton) elements.copyResultsButton.style.display = 'none';
                 return;
             }
 
@@ -273,7 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let W_P_each, W_E_each;
             if (weightScheme === "64") {
                 W_E_each = 0.20; W_P_each = 0.40 / 3;
-            } else { // "73"
+            } else { 
                 W_P_each = 0.30 / 3; W_E_each = 0.70 / 3;
             }
             
@@ -315,10 +373,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (elements.neededResultDiv) elements.neededResultDiv.style.display = 'none';
                 
             } else { // calcMode === 'needed'
-                const customTargetDefault = (elements.customTargetGradeInput && elements.customTargetGradeInput.placeholder) ? elements.customTargetGradeInput.placeholder : '70';
-                let customTargetVal = (elements.customTargetGradeInput && elements.customTargetGradeInput.value.trim() !== "") ? elements.customTargetGradeInput.value : customTargetDefault;
-                const customTarget = parseFloat(customTargetVal) || parseFloat(customTargetDefault);
-
+                const customTargetDefaultStr = (elements.customTargetGradeInput && elements.customTargetGradeInput.placeholder) ? elements.customTargetGradeInput.placeholder : '70';
+                let customTargetValStr = (elements.customTargetGradeInput && elements.customTargetGradeInput.value.trim() !== "") ? elements.customTargetGradeInput.value : customTargetDefaultStr;
+                const customTarget = parseFloat(customTargetValStr) || parseFloat(customTargetDefaultStr);
+                
                 calculationSummary += `  (計算三段段考所需分數)\n`;
 
                 const knownUnroundedScoreSum = (scores.p1 * W_P_each) + (scores.e1 * W_E_each) +
@@ -357,7 +415,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- Clear Functions ---
     function clearInputsAndResults() {
-        if (!essentialElementsPresent && !elements.s_p1_input) { // Check if elements object itself might not be fully populated for some reason
+        // ... (same as previous, ensure it calls localStorage.removeItem for scores)
+        if (!essentialElementsPresent && !elements.s_p1_input) { 
              console.warn("Clear function called but essential elements might be missing.");
         }
         try {
@@ -372,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     errorElement.textContent = '';
                     errorElement.style.display = 'none';
                 }
-                try { // Clear from localStorage as well
+                try { 
                     localStorage.removeItem(scoreLocalStoragePrefix + idSuffix);
                 } catch (e) {
                     console.error(`Error removing score ${idSuffix} from localStorage:`, e);
@@ -381,13 +440,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if(elements.customTargetGradeInput) elements.customTargetGradeInput.value = '70';
             clearResultsAndHide();
-            updateUIForMode(); 
+            if (essentialElementsPresent) updateUIForMode(); 
         } catch (e) {
             console.error("清除時發生錯誤:", e);
         }
     }
 
     function clearResultsAndHide() {
+        // ... (same as previous)
         if(elements.totalGradeResultDiv) { elements.totalGradeResultDiv.textContent = ''; elements.totalGradeResultDiv.style.display = 'none'; }
         if(elements.statusResultDiv) { elements.statusResultDiv.textContent = ''; elements.statusResultDiv.style.display = 'none'; }
         if(elements.neededResultDiv) { elements.neededResultDiv.innerHTML = ''; elements.neededResultDiv.style.display = 'none'; }
@@ -400,6 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Event Listeners for Buttons ---
     if (elements.copyResultsButton) {
         elements.copyResultsButton.addEventListener('click', () => {
+            // ... (same as previous)
             const summaryToCopy = elements.copyResultsButton.getAttribute('data-summary');
             if (summaryToCopy && navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(summaryToCopy)
@@ -409,10 +470,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                     .catch(err => {
                         console.error('複製結果時發生錯誤: ', err);
-                        // alert('複製失敗，您的瀏覽器可能不支援此功能或未授予權限。');
                     });
             } else if (!navigator.clipboard || !navigator.clipboard.writeText) {
-                // alert('您的瀏覽器不支援自動複製功能。');
+                // console.warn('您的瀏覽器不支援自動複製功能。');
             }
         });
     }

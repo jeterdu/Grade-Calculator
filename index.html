@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>學期成績計算機</title>
+    <title>學期成績計算機 (進階版)</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>學期成績計算機</h1>
+        <h1>學期成績計算機 (進階版)</h1>
 
         <div class="options-group">
             <fieldset>
                 <legend>
                     選擇計分權重
-                    <span class="tooltip" title="選擇您學校採用的段考與平時成績占比。">&#9432;</span>
+                    <span class="tooltip-icon" role="button" tabindex="0" data-tooltip-target="tooltip-weight-content">&#9432;</span>
                 </legend>
+                <div id="tooltip-weight-content" class="tooltip-text-content">選擇您學校採用的段考與平時成績占比。</div>
                 <div>
                     <input type="radio" id="weightScheme1" name="weightScheme" value="64">
                     <label for="weightScheme1">段考 60% (各20%)、平時 40% (各40%/3)</label>
@@ -39,17 +40,19 @@
             </fieldset>
         </div>
         
-        <div id="customTargetInputContainer" class="score-item" style="display: none;">
+        <div id="customTargetInputContainer" class="score-item input-group-tooltip" style="display: none;">
             <label for="customTargetGrade">期望學期總成績目標：</label>
             <input type="number" id="customTargetGrade" min="0" max="100" value="60">
-            <span class="tooltip" title="輸入您期望達到的學期總成績，計算機會告訴您三段段考至少需要幾分。預設為60分。">&#9432;</span>
+            <span class="tooltip-icon" role="button" tabindex="0" data-tooltip-target="tooltip-custom-target-content">&#9432;</span>
+            <div id="tooltip-custom-target-content" class="tooltip-text-content">輸入您期望達到的學期總成績，計算機會告訴您三段段考至少需要幾分。預設為60分。</div>
         </div>
 
         <div class="scores-input">
             <h2>
                 輸入各項成績 (0-100)
-                <span class="tooltip" title="請輸入0至100之間的數字。若有欄位未填寫，將以0分計算。">&#9432;</span>
+                <span class="tooltip-icon" role="button" tabindex="0" data-tooltip-target="tooltip-scores-general-content">&#9432;</span>
             </h2>
+            <div id="tooltip-scores-general-content" class="tooltip-text-content">請輸入0至100之間的數字。若有欄位未填寫，將以0分計算。</div>
             <div class="score-item">
                 <label for="s_p1">一段平時成績：</label>
                 <input type="number" id="s_p1" min="0" max="100" placeholder="0-100">
@@ -73,7 +76,6 @@
             <div class="score-item" id="s_e3_item">
                 <label for="s_e3">三段段考成績：</label>
                 <input type="number" id="s_e3" min="0" max="100" placeholder="0-100">
-                <span class="tooltip" id="s_e3_tooltip" title="在「計算學期總成績」模式下，可調整此分數即時查看總成績變化。">&#9432;</span>
             </div>
         </div>
 
@@ -87,9 +89,10 @@
             <div id="statusResult" class="result-item"></div>
             <div id="neededResult" class="result-item"></div>
         </div>
-    </div> <footer>
-        <p>版本 1.2 (2025-05-08)</p>
-        <p>本工具 由Jeter Du開發設計</p>
+    </div>
+
+    <footer>
+        <p>版本 1.2.1 (2025-05-08)</p> <p>本工具 由Jeter Du開發設計</p>
         <p>由Randy Chxng & Hardy Tsai 功能發想、測試</p>
         <p>本工具誕生於2025/01/09</p>
         <p>原始製作想法來自 <a href="https://score.dabo.xyz/" target="_blank" rel="noopener noreferrer">https://score.dabo.xyz/</a></p>

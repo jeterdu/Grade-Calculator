@@ -4,18 +4,18 @@
     --content-background: #ffffff;
     --text-primary: #1c1c1e;      
     --text-secondary: #3c3c43;    
-    --text-tertiary: #8a8a8e;     
+    --text-tertiary-base: #8a8a8e; /* Base tertiary for general use */
     --text-quaternary: #636366;   
 
     --separator-color: #c6c6c8;    
-    --separator-opaque: #d1d1d6;   
+    --separator-opaque-base: #d1d1d6; /* Base opaque for general use */
 
-    --accent-blue: #007AFF;
-    --accent-blue-hover: #0056b3;
+    --accent-blue-base: #007AFF; /* Base blue */
+    --accent-blue-hover-base: #0056b3;
 
-    --button-secondary-bg: #e5e5ea;
-    --button-secondary-text: var(--accent-blue);
-    --button-secondary-hover-bg: #d1d1d6;
+    --button-secondary-bg-base: #e5e5ea;
+    --button-secondary-text-base: var(--accent-blue-base);
+    --button-secondary-hover-bg-base: #d1d1d6;
 
     --input-bg: var(--system-background); 
     --input-border: var(--separator-color);
@@ -24,11 +24,13 @@
     --status-pass: #34C759;
     --status-makeup: #FF9500;
     --status-fail: #FF3B30;
-    --status-fail-shadow: rgba(255, 59, 48, 0.3); /* For invalid input shadow */
+    --status-fail-shadow: rgba(255, 59, 48, 0.3);
 
     --results-bg: transparent; 
-    --footer-bg: var(--system-background); 
-    --link-color: var(--accent-blue);
+    --footer-bg-light: var(--system-background); /* Specific light footer bg */
+    --footer-border-light: var(--separator-opaque-base);
+    --footer-text-light: var(--text-tertiary-base);
+    --footer-link-light: var(--accent-blue-base);
 
     --card-shadow: rgba(0,0,0,0.08);
     --grouped-item-shadow: rgba(0,0,0,0.03);
@@ -36,49 +38,39 @@
     --theme-toggle-button-bg: transparent;
     --theme-toggle-button-border: var(--separator-color);
     --theme-toggle-button-text: var(--text-secondary);
-    --theme-toggle-button-hover-bg: rgba(0, 0, 0, 0.05); /* Subtle hover */
+    --theme-toggle-button-hover-bg: rgba(0, 0, 0, 0.05); 
+    
+    /* Define Dark Mode Colors Explicitly Here (even though applied via class later) */
+    --system-background-dark: #000000; 
+    --content-background-dark: #1c1c1e; 
+    --text-primary-dark: #ffffff;       
+    --text-secondary-dark: rgba(235, 235, 245, 0.6); 
+    --text-tertiary-dark: rgba(235, 235, 245, 0.3); 
+    --text-quaternary-dark: rgba(235, 235, 245, 0.6); 
+    --separator-color-dark: rgba(84, 84, 88, 0.65);  
+    --separator-opaque-dark: #38383A;            
+    --accent-blue-dark: #0A84FF; 
+    --accent-blue-hover-dark: #0060c0; 
+    --button-secondary-bg-dark: #2c2c2e; 
+    --button-secondary-text-dark: var(--accent-blue-dark);
+    --button-secondary-hover-bg-dark: #3a3a3c;
+    --input-bg-dark: #2c2c2e; 
+    --input-focus-shadow-dark: rgba(10, 132, 255, 0.4); 
+    --status-pass-dark: #30D158;   
+    --status-makeup-dark: #FF9F0A; 
+    --status-fail-dark: #FF453A;   
+    --status-fail-shadow-dark: rgba(255, 69, 58, 0.4);
+    --results-bg-dark: transparent; 
+    --footer-bg-dark: var(--system-background-dark);
+    --footer-border-dark: var(--separator-opaque-dark);
+    --footer-text-dark: var(--text-tertiary-dark);
+    --footer-link-dark: var(--accent-blue-dark);
+    --card-shadow-dark: rgba(0,0,0,0.25); 
+    --grouped-item-shadow-dark: rgba(0,0,0,0.15);
+    --theme-toggle-button-hover-bg-dark: rgba(255, 255, 255, 0.1);
 }
 
-/* --- Dark Theme Variable Overrides --- */
-body.dark-theme {
-    --system-background: #000000; 
-    --content-background: #1c1c1e; 
-    --text-primary: #ffffff;       
-    --text-secondary: rgba(235, 235, 245, 0.6); 
-    --text-tertiary: rgba(235, 235, 245, 0.3); 
-    --text-quaternary: rgba(235, 235, 245, 0.6); 
-
-    --separator-color: rgba(84, 84, 88, 0.65);  
-    --separator-opaque: #38383A;            
-
-    --accent-blue: #0A84FF; 
-    --accent-blue-hover: #0060c0; 
-
-    --button-secondary-bg: #2c2c2e; 
-    /* --button-secondary-text: var(--accent-blue); /* Stays same */
-    --button-secondary-hover-bg: #3a3a3c;
-
-    --input-bg: #2c2c2e; 
-    /* --input-border: var(--separator-color); /* Stays same */
-    --input-focus-shadow: rgba(10, 132, 255, 0.4); 
-
-    --status-pass: #30D158;   
-    --status-makeup: #FF9F0A; 
-    --status-fail: #FF453A;   
-    --status-fail-shadow: rgba(255, 69, 58, 0.4);
-        
-    /* --results-bg: transparent; /* Stays same */
-    /* --footer-bg: var(--system-background); /* Stays same as it uses system-background */
-    /* --link-color: var(--accent-blue); /* Stays same as it uses accent-blue */
-
-    --card-shadow: rgba(0,0,0,0.3); 
-    --grouped-item-shadow: rgba(0,0,0,0.15);
-
-    --theme-toggle-button-hover-bg: rgba(255, 255, 255, 0.1);
-}
-
-
-/* --- Apply Variables to Existing Styles --- */
+/* --- Apply Variables --- */
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -91,7 +83,7 @@ body {
     flex-direction: column; 
     align-items: center; 
     min-height: 100vh;
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth theme transition */
+    transition: background-color 0.3s ease, color 0.3s ease; 
 }
 
 .container {
@@ -104,14 +96,14 @@ body {
     margin-top: 20px; 
     margin-bottom: 20px; 
     box-sizing: border-box;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth theme transition */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; 
 }
 
 /* Theme Toggle Button specific styles */
 .header-utils {
     text-align: right;
-    margin-bottom: -10px; /* Adjust to pull it up a bit if h1 has large top margin */
-    position: relative; /* To keep it above h1 if margins overlap */
+    margin-bottom: -10px; 
+    position: relative; 
     z-index: 10;
 }
 
@@ -120,13 +112,13 @@ body {
     border: 1px solid var(--theme-toggle-button-border);
     color: var(--theme-toggle-button-text);
     padding: 6px 12px;
-    border-radius: 20px; /* Pill shape */
+    border-radius: 20px; 
     cursor: pointer;
-    font-size: 20px; /* For emoji icon */
-    line-height: 1; /* Ensure icon is centered */
+    font-size: 20px; 
+    line-height: 1; 
     margin-top: 0; 
-    margin-right: 0; /* Align to the very right of container padding */
-    min-width: auto; /* Override general button min-width */
+    margin-right: 0; 
+    min-width: auto; 
     transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
@@ -134,275 +126,126 @@ body {
     background-color: var(--theme-toggle-button-hover-bg);
 }
 
+/* ... (h1, h2, h3, legend styles using variables like var(--text-primary), var(--text-quaternary) etc. - same as previous) ... */
+h1 { font-size: 28px; font-weight: 600; text-align: center; color: var(--text-primary); margin-top: 10px; margin-bottom: 25px; }
+h2 { font-size: 20px; font-weight: 600; color: var(--text-primary); margin-top: 25px; margin-bottom: 15px; display: flex; align-items: center; }
+h3 { font-size: 17px; font-weight: 600; color: var(--text-secondary); margin-top: 25px; margin-bottom: 15px; display: flex; align-items: center; }
+legend { font-size: 15px; font-weight: 400; color: var(--text-quaternary); padding: 0 2px; margin-bottom: 8px; margin-left: 13px; text-transform: uppercase; display: flex; align-items: center; }
 
-h1 {
-    font-size: 28px;
-    font-weight: 600; 
-    text-align: center;
-    color: var(--text-primary);
-    margin-top: 10px; /* Reduced to accommodate toggle button */
-    margin-bottom: 25px;
-}
+.options-group { display: flex; flex-direction: column; gap: 25px; margin-bottom: 25px; }
 
-h2 { 
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-top: 25px;
-    margin-bottom: 15px;
-    display: flex; 
-    align-items: center; 
-}
+fieldset { border: none; border-radius: 10px; padding: 0; margin: 0; background-color: var(--content-background); box-shadow: 0 1px 1px var(--grouped-item-shadow); transition: background-color 0.3s ease, box-shadow 0.3s ease; }
 
-h3 { 
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--text-secondary); 
-    margin-top: 25px;
-    margin-bottom: 15px;
-    display: flex; 
-    align-items: center; 
-}
+.options-group div { margin-bottom: 0; padding: 11px 15px; display: flex; align-items: center; }
+.options-group div:not(:last-child) { border-bottom: 1px solid var(--separator-color); transition: border-color 0.3s ease; }
+.options-group label, .score-item label { margin-left: 0; cursor: pointer; font-size: 16px; color: var(--text-primary); transition: color 0.3s ease; }
 
-legend { 
-    font-size: 15px; 
-    font-weight: 400; 
-    color: var(--text-quaternary);   
-    padding: 0 2px;
-    margin-bottom: 8px; 
-    margin-left: 13px; 
-    text-transform: uppercase; 
-    display: flex; 
-    align-items: center; 
-}
+/* ... (Score input item styles using variables - same as previous) ... */
+.score-item { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 15px; }
+.scores-input { background-color: var(--content-background); border-radius: 10px; padding-top: 5px; padding-bottom: 5px; box-shadow: 0 1px 1px var(--grouped-item-shadow); transition: background-color 0.3s ease, box-shadow 0.3s ease; }
+.scores-input h2 { margin-left: 15px; margin-bottom: 8px; margin-top: 15px; }
+.score-item:not(:last-child) { border-bottom: 1px solid var(--separator-color); transition: border-color 0.3s ease; }
+.score-item label { flex-basis: 170px; flex-shrink: 0; }
 
-.options-group {
-    display: flex;
-    flex-direction: column;
-    gap: 25px; 
-    margin-bottom: 25px;
-}
+/* Input number styles using variables */
+input[type="number"] { padding: 10px 12px; border: 1px solid var(--input-border); border-radius: 8px; width: 100px; box-sizing: border-box; font-size: 16px; background-color: var(--input-bg); color: var(--text-primary); text-align: right; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+input[type="number"]:focus { border-color: var(--accent-blue-base); /* Use base blue for focus always? Or var(--accent-blue) */ outline: none; box-shadow: 0 0 0 2px var(--input-focus-shadow); }
+input[type="number"].input-invalid { border-color: var(--status-fail); box-shadow: 0 0 0 2px var(--status-fail-shadow); }
+.error-message { font-size: 13px; color: var(--status-fail); margin-top: 4px; flex-basis: 100%; margin-left: calc(170px + 12px + 15px); display: none; transition: color 0.3s ease; }
 
-fieldset {
-    border: none; 
-    border-radius: 10px; 
-    padding: 0; 
-    margin: 0; 
-    background-color: var(--content-background); 
-    box-shadow: 0 1px 1px var(--grouped-item-shadow); 
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
+/* Custom Radio Button styles using variables */
+input[type="radio"] { appearance: none; -webkit-appearance: none; width: 22px; height: 22px; border: 1.5px solid var(--separator-color); border-radius: 50%; position: relative; outline: none; margin-right: 12px; vertical-align: middle; flex-shrink: 0; cursor: pointer; background-color: var(--content-background); transition: background-color 0.3s ease, border-color 0.3s ease; }
+input[type="radio"]:checked { border-color: var(--accent-blue-base); /* Use base blue or var(--accent-blue)? Let's try var(--accent-blue) */ background-color: var(--accent-blue); }
+input[type="radio"]:checked::after { content: ''; display: block; width: 10px; height: 10px; background: var(--content-background); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: background-color 0.3s ease; }
+.options-group div > label { flex-grow: 1; }
 
-.options-group div {
-    margin-bottom: 0; 
-    padding: 11px 15px; 
-    display: flex; 
-    align-items: center;
-}
+/* Button styles using variables */
+button { display: inline-block; border: none; border-radius: 8px; cursor: pointer; font-size: 17px; padding: 12px 20px; margin-top: 25px; margin-right: 10px; transition: background-color 0.2s ease, opacity 0.2s ease, color 0.2s ease; text-align: center; min-width: 100px; }
+button:active { opacity: 0.7; }
+#calculateButton { background-color: var(--accent-blue-base); /* Use base blue or var(--accent-blue)? Let's try var(--accent-blue) */ color: white; font-weight: 600; }
+#calculateButton:hover { background-color: var(--accent-blue-hover-base); /* Or var(--accent-blue-hover)? */ }
+#clearButton, #copyResultsButton { background-color: var(--button-secondary-bg-base); color: var(--button-secondary-text-base); font-weight: 500; }
+#clearButton:hover, #copyResultsButton:hover { background-color: var(--button-secondary-hover-bg-base); }
 
-.options-group div:not(:last-child) {
-    border-bottom: 1px solid var(--separator-color); 
-    transition: border-color 0.3s ease;
-}
+/* Results Output Area styles using variables */
+.results-output { margin-top: 25px; padding: 15px; background-color: var(--results-bg); border: none; border-radius: 8px; transition: background-color 0.3s ease; }
+.results-output h3 { margin-left: 0; padding-left: 0; }
+.result-item { margin-bottom: 12px; font-size: 1.05em; line-height: 1.5; padding: 8px 0; color: var(--text-primary); transition: color 0.3s ease; }
 
-.options-group label, .score-item label {
-    margin-left: 0; 
-    cursor: pointer;
-    font-size: 16px;
-    color: var(--text-primary); 
-    transition: color 0.3s ease;
-}
-
-.score-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap; 
-    padding: 8px 15px; 
-}
-.scores-input { 
-    background-color: var(--content-background);
-    border-radius: 10px;
-    padding-top: 5px; 
-    padding-bottom: 5px;
-    box-shadow: 0 1px 1px var(--grouped-item-shadow);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-.scores-input h2 {
-    margin-left: 15px; 
-    margin-bottom: 8px;
-    margin-top: 15px;
-}
-.score-item:not(:last-child) {
-    border-bottom: 1px solid var(--separator-color);
-    transition: border-color 0.3s ease;
-}
-
-.score-item label {
-    flex-basis: 170px; 
-    flex-shrink: 0;
-}
-
-input[type="number"] {
-    padding: 10px 12px;
-    border: 1px solid var(--input-border);
-    border-radius: 8px;
-    width: 100px; 
-    box-sizing: border-box;
-    font-size: 16px; 
-    background-color: var(--input-bg); 
-    color: var(--text-primary);
-    text-align: right; 
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-input[type="number"]:focus { 
-    border-color: var(--accent-blue);
-    outline: none; 
-    box-shadow: 0 0 0 2px var(--input-focus-shadow); 
-}
-input[type="number"].input-invalid {
-    border-color: var(--status-fail);
-    box-shadow: 0 0 0 2px var(--status-fail-shadow); 
-}
-.error-message {
-    font-size: 13px;
-    color: var(--status-fail);
-    margin-top: 4px;
-    flex-basis: 100%; 
-    margin-left: calc(170px + 12px + 15px); /* label_width + radio_margin + container_padding */
-    display: none; 
-    transition: color 0.3s ease;
-}
-
-
-input[type="radio"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 22px;
-    height: 22px;
-    border: 1.5px solid var(--separator-color);
-    border-radius: 50%;
-    position: relative;
-    outline: none;
-    margin-right: 12px; 
-    vertical-align: middle;
-    flex-shrink: 0; 
-    cursor: pointer;
-    background-color: var(--content-background); /* Radio background same as cell */
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-input[type="radio"]:checked {
-    border-color: var(--accent-blue);
-    background-color: var(--accent-blue); 
-}
-input[type="radio"]:checked::after { 
-    content: '';
-    display: block;
-    width: 10px; 
-    height: 10px;
-    background: var(--content-background); /* Dot color needs to contrast with checked state */
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: background-color 0.3s ease;
-}
-.options-group div > label { 
-    flex-grow: 1; 
-}
-
-button {
-    display: inline-block;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 17px; 
-    padding: 12px 20px;
-    margin-top: 25px; 
-    margin-right: 10px;
-    transition: background-color 0.2s ease, opacity 0.2s ease, color 0.2s ease; 
-    text-align: center;
-    min-width: 100px; 
-}
-button:active { 
-    opacity: 0.7;
-}
-
-#calculateButton {
-    background-color: var(--accent-blue); 
-    color: white; 
-    font-weight: 600; 
-}
-#calculateButton:hover {
-    background-color: var(--accent-blue-hover); 
-}
-
-#clearButton, #copyResultsButton { 
-    background-color: var(--button-secondary-bg); 
-    color: var(--button-secondary-text); 
-    font-weight: 500; 
-}
-#clearButton:hover, #copyResultsButton:hover {
-    background-color: var(--button-secondary-hover-bg); 
-}
-
-.results-output {
-    margin-top: 25px;
-    padding: 15px;
-    background-color: var(--results-bg); 
-    border: none; 
-    border-radius: 8px; 
-    transition: background-color 0.3s ease;
-}
-.results-output h3 { 
-    margin-left: 0; 
-    padding-left: 0;
-}
-
-.result-item {
-    margin-bottom: 12px; 
-    font-size: 1.05em; 
-    line-height: 1.5; 
-    padding: 8px 0; 
-    color: var(--text-primary); 
-    transition: color 0.3s ease;
-}
-
+/* Status Colors using variables */
 #statusResult.pass { color: var(--status-pass); font-weight: 600;} 
 #statusResult.makeup { color: var(--status-makeup); font-weight: 600;} 
 #statusResult.fail { color: var(--status-fail); font-weight: 600;} 
 
+#totalGradeResult, #statusResult, #neededResult, #copyResultsButton { display: none; }
 
-#totalGradeResult, #statusResult, #neededResult, #copyResultsButton {
-    display: none; 
-}
-
+/* --- Footer Styles (Using default light vars) --- */
 footer {
     text-align: center; 
     margin-top: 30px;   
     padding: 20px 15px; 
-    border-top: 1px solid var(--separator-opaque); 
+    border-top: 1px solid var(--footer-border-light); 
     width: 100%; 
     box-sizing: border-box; 
-    background-color: var(--footer-bg); 
+    background-color: var(--footer-bg-light); 
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 footer p {
     font-size: 13px;  
-    color: var(--text-tertiary); 
+    color: var(--footer-text-light); 
     margin: 4px 0;     
     line-height: 1.4;  
     transition: color 0.3s ease;
 }
 
 footer a { 
-    color: var(--link-color); 
+    color: var(--footer-link-light); 
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 footer a:hover {
     text-decoration: underline;
+}
+
+/* --- Dark Theme Overrides for Footer (Direct) --- */
+body.dark-theme footer {
+    background-color: var(--footer-bg-dark);
+    border-top-color: var(--footer-border-dark);
+}
+body.dark-theme footer p {
+    color: var(--footer-text-dark);
+}
+body.dark-theme footer a {
+    color: var(--footer-link-dark);
+}
+
+/* --- Dark Theme Overrides for other elements that use base vars directly --- */
+/* Re-evaluate elements that used base variables directly */
+body.dark-theme input[type="radio"]:checked {
+    border-color: var(--accent-blue-dark);
+    background-color: var(--accent-blue-dark);
+}
+body.dark-theme input[type="radio"]:checked::after {
+    background: var(--content-background-dark); /* Dot contrasts with dark blue */
+}
+body.dark-theme input[type="number"]:focus { 
+    border-color: var(--accent-blue-dark);
+}
+body.dark-theme #calculateButton {
+    background-color: var(--accent-blue-dark);
+}
+body.dark-theme #calculateButton:hover {
+    background-color: var(--accent-blue-hover-dark);
+}
+body.dark-theme #clearButton, body.dark-theme #copyResultsButton {
+    background-color: var(--button-secondary-bg-dark);
+    color: var(--button-secondary-text-dark); /* Uses dark accent blue */
+}
+body.dark-theme #clearButton:hover, body.dark-theme #copyResultsButton:hover {
+    background-color: var(--button-secondary-hover-bg-dark);
+}
+body.dark-theme #themeToggleButton:hover {
+     background-color: var(--theme-toggle-button-hover-bg-dark);
 }

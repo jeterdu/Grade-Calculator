@@ -20,14 +20,23 @@ document.addEventListener('DOMContentLoaded', () => {
         neededResultDiv: document.getElementById('neededResult')
     };
 
+    const scoreInputIds = ['s_p1', 's_e1', 's_p2', 's_e2', 's_p3', 's_e3'];
+    scoreInputIds.forEach(id => {
+        elements[`error_${id}`] = document.getElementById(`error_${id}`);
+    });
+
     let essentialElementsPresent = true;
     for (const key in elements) {
         if (elements.hasOwnProperty(key)) {
-            if (!elements[key] && key !== 'weightSchemeRadios' && key !== 'calculationModeRadios') {
+            if (!elements[key] && 
+                key !== 'weightSchemeRadios' && 
+                key !== 'calculationModeRadios' && 
+                !key.startsWith('error_')) {
                 console.error(`Error: HTML element with ID or reference '${key}' not found.`);
                 essentialElementsPresent = false;
             } else if ((key === 'weightSchemeRadios' || key === 'calculationModeRadios') && elements[key].length === 0) {
                 console.error(`Error: No elements found for radio button group '${key}'.`);
+                // This might not be critical if defaults are handled, but good to note.
             }
         }
     }
@@ -36,11 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
         alert("網頁初始化錯誤：缺少必要的 HTML 元件。請檢查 Console 獲取更多資訊。功能可能無法正常運作。");
     }
 
-    // --- Feature 1: Remember Weighting Scheme ---
+    // --- Feature: Remember Weighting Scheme (localStorage) ---
     function loadSavedWeightScheme() {
         try {
             const savedScheme = localStorage.getItem('gradeCalc_weightScheme');
-            const defaultWeightRadio = elements.s_p1_input ? document.getElementById('weightScheme1') : null; 
+            // Ensure elements.weightSchemeRadios itself is not null before trying to access its members or length
+            const defaultWeightRadio = elements.weightSchemeRadios && elements.weightSchemeRadios.length > 0 ? elements.weightSchemeRadios[0].labels[0].htmlFor : 'weightScheme1';
             let schemeApplied = false;
             if (savedScheme && elements.weightSchemeRadios) {
                 for (let i = 0; i < elements.weightSchemeRadios.length; i++) {
@@ -51,13 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
-            if (!schemeApplied && defaultWeightRadio) {
-                defaultWeightRadio.checked = true;
+            if (!schemeApplied) {
+                 const defaultRadioElem = document.getElementById(defaultWeightRadio);
+                 if(defaultRadioElem) defaultRadioElem.checked = true;
+                 else if(elements.weightSchemeRadios && elements.weightSchemeRadios.length > 0) elements.weightSchemeRadios[0].checked = true; // Fallback
             }
         } catch (e) {
             console.error("Error loading weight scheme:", e);
-            const defaultWeightRadio = elements.s_p1_input ? document.getElementById('weightScheme1') : null;
-            if (defaultWeightRadio) defaultWeightRadio.checked = true;
+             if(elements.weightSchemeRadios && elements.weightSchemeRadios.length > 0) elements.weightSchemeRadios[0].checked = true;
         }
     }
 
@@ -76,21 +87,115 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.weightSchemeRadios.forEach(radio => radio.addEventListener('change', saveWeightScheme));
         loadSavedWeightScheme();
     }
+
+    // --- Feature: Save/Load All Entered Scores (localStorage) ---
+    const scoreLocalStoragePrefix = 'gradeCalc_score_';
+
+    function saveScore(inputIdSuffix) { // Renamed parameter for clarity
+        const inputElement = elements[inputIdSuffix + '_input'];
+        if (inputElement) {
+            try {
+                localStorage.setItem(scoreLocalStoragePrefix + inputIdSuffix, inputElement.value);
+            } catch (e) {
+                console.error(`Error saving score for ${inputIdSuffix}:`, e);
+            }
+        }
+    }
+
+    function loadScores() {
+        scoreInputIds.forEach(idSuffix => {
+            const inputKey = idSuffix + '_input';
+            const inputElement = elements[inputKey];
+            if (inputElement) {
+                try {
+                    const savedValue = localStorage.getItem(scoreLocalStoragePrefix + idSuffix);
+                    if (savedValue !== null) {
+                        inputElement.value = savedValue;
+                        validateScoreInput(inputElement, elements[`error_${idSuffix}`]); 
+                    }
+                } catch (e) {
+                    console.error(`Error loading score for ${idSuffix}:`, e);
+                }
+            }
+        });
+    }
     
+    // --- Feature: Input Validation and Hints ---
+    function validateScoreInput(inputElement, errorElement) {
+        if (!inputElement) return true; // Should not happen if initial check passed, consider it valid
+
+        const value = parseFloat(inputElement.value);
+        let errorMessage = "";
+
+        if (inputElement.value.trim() === "") { 
+            inputElement.classList.remove('input-invalid');
+            if (errorElement) {
+                errorElement.textContent = ""; 
+                errorElement.style.display = 'none';
+            }
+            return true; 
+        }
+
+        if (isNaN(value)) {
+            errorMessage = "請輸入數字";
+        } else if (value < 0) {
+            errorMessage = "分數不能小於0";
+        } else if (value > 100) {
+            errorMessage = "分數不能大於100";
+        }
+
+        if (errorMessage) {
+            inputElement.classList.add('input-invalid');
+            if (errorElement) {
+                errorElement.textContent = errorMessage;
+                errorElement.style.display = 'block';
+            }
+            return false;
+        } else {
+            inputElement.classList.remove('input-invalid');
+            if (errorElement) {
+                errorElement.textContent = "";
+                errorElement.style.display = 'none';
+            }
+            return true;
+        }
+    }
+    
+    // Attach event listeners for saving scores and validation AFTER loadScores
+    scoreInputIds.forEach(idSuffix => {
+        const inputElement = elements[idSuffix + '_input'];
+        const errorElement = elements[`error_${idSuffix}`];
+        if (inputElement) {
+            inputElement.addEventListener('input', () => {
+                validateScoreInput(inputElement, errorElement);
+                saveScore(idSuffix);
+            });
+        }
+    });
+
+    if(essentialElementsPresent) { // Only load scores if elements are there
+        loadScores(); 
+    }
+
+
+    // --- Helper Functions ---
     function getSelectedRadioValue(name) {
-        const radios = document.getElementsByName(name);
+        const radios = document.getElementsByName(name); 
         for (let i = 0; i < radios.length; i++) {
             if (radios[i].checked) {
                 return radios[i].value;
             }
         }
-        const defaultRadio = document.querySelector(`input[name="${name}"][checked]`);
-        return defaultRadio ? defaultRadio.value : (name === 'weightScheme' ? '64' : 'total'); // Provide defaults
+        // Fallback for initial load if no radio is 'checked' in HTML (though it should be)
+        if (name === 'weightScheme') return '64';
+        if (name === 'calculationMode') return 'total';
+        return null;
     }
     
     function getSelectedWeightScheme() { return getSelectedRadioValue('weightScheme'); }
     function getSelectedCalculationMode() { return getSelectedRadioValue('calculationMode'); }
 
+    // --- UI Updates based on Mode ---
     function updateUIForMode() {
         const mode = getSelectedCalculationMode();
         clearResultsAndHide(); 
@@ -99,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (mode === 'total') {
                 elements.s_e3_item_div.style.display = 'flex';
                 elements.customTargetInputContainer.style.display = 'none';
-            } else { // mode === 'needed'
+            } else { 
                 elements.s_e3_item_div.style.display = 'none';
                 elements.customTargetInputContainer.style.display = 'flex';
             }
@@ -110,9 +215,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (elements.calculationModeRadios && elements.calculationModeRadios.length > 0) {
         elements.calculationModeRadios.forEach(radio => radio.addEventListener('change', updateUIForMode));
-        updateUIForMode(); 
+        if (essentialElementsPresent) updateUIForMode(); 
     }
 
+
+    // --- Score Retrieval ---
     function getScores() {
         return {
             p1: parseFloat(elements.s_p1_input ? elements.s_p1_input.value : 0) || 0,
@@ -124,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
     
-    // Helper function for calculating needed score text
+    // --- Needed Score Text Helper ---
     function getNeededScoreText(targetGrade, knownUnroundedScoreSum, W_E_each, labelPrefix = "為達總成績") {
         let neededScore = Math.ceil((targetGrade - 0.5 - knownUnroundedScoreSum) / W_E_each);
         if (neededScore > 100) {
@@ -136,8 +243,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- Main Calculation and Display ---
     function calculateAndDisplay() {
+        if (!essentialElementsPresent) {
+            alert("部分網頁元件遺失，無法執行計算。請檢查 Console。");
+            return;
+        }
         try {
+            let allInputsProgrammaticallyValid = true;
+            scoreInputIds.forEach(idSuffix => {
+                const inputElement = elements[idSuffix + '_input'];
+                const errorElement = elements[`error_${idSuffix}`];
+                if (!validateScoreInput(inputElement, errorElement) && inputElement && inputElement.value.trim() !== "") {
+                    allInputsProgrammaticallyValid = false;
+                }
+            });
+
+            if (!allInputsProgrammaticallyValid) {
+                alert("部分成績輸入無效 (例如超出0-100範圍)，請修正紅色提示的欄位後再計算。");
+                return;
+            }
+
             const scores = getScores();
             const weightScheme = getSelectedWeightScheme();
             const calcMode = getSelectedCalculationMode();
@@ -175,22 +301,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (finalGrade >= 60) {
                         statusText = "狀態：恭喜過關！"; elements.statusResultDiv.classList.add('pass');
                     } else if (finalGrade >= 40) {
-                        statusText = "狀態：您可能需要補考！"; elements.statusResultDiv.classList.add('makeup'); // "您可能需要補考"
+                        statusText = "狀態：您可能需要補考！"; elements.statusResultDiv.classList.add('makeup');
                     } else {
-                        statusText = "狀態：您可能會被當！"; elements.statusResultDiv.classList.add('fail'); // "您可能會被當"
+                        statusText = "狀態：您可能會被當！"; elements.statusResultDiv.classList.add('fail');
                     }
                     elements.statusResultDiv.textContent = statusText;
-                    elements.statusResultDiv.style.display = 'block'; // Ensure it's displayed
-                    calculationSummary += `\n計算結果：\n  學期總成績: ${finalGrade}分\n  ${statusText}`; // Add statusText to summary
+                    elements.statusResultDiv.style.display = 'block';
+                    calculationSummary += `\n計算結果：\n  學期總成績: ${finalGrade}分\n  ${statusText}`;
                 } else {
                     calculationSummary += `\n計算結果：\n  學期總成績: ${finalGrade}分\n  (狀態顯示元件遺失)`;
                 }
 
                 if (elements.neededResultDiv) elements.neededResultDiv.style.display = 'none';
                 
-
             } else { // calcMode === 'needed'
-                const customTarget = parseFloat(elements.customTargetGradeInput ? elements.customTargetGradeInput.value : 70) || 70; // Default custom to 70
+                const customTargetDefault = (elements.customTargetGradeInput && elements.customTargetGradeInput.placeholder) ? elements.customTargetGradeInput.placeholder : '70';
+                let customTargetVal = (elements.customTargetGradeInput && elements.customTargetGradeInput.value.trim() !== "") ? elements.customTargetGradeInput.value : customTargetDefault;
+                const customTarget = parseFloat(customTargetVal) || parseFloat(customTargetDefault);
+
                 calculationSummary += `  (計算三段段考所需分數)\n`;
 
                 const knownUnroundedScoreSum = (scores.p1 * W_P_each) + (scores.e1 * W_E_each) +
@@ -222,20 +350,36 @@ document.addEventListener('DOMContentLoaded', () => {
             const errorDisplay = elements.neededResultDiv || elements.totalGradeResultDiv;
             if(errorDisplay) {
                 errorDisplay.textContent = "計算時發生錯誤，請檢查 Console。";
-                errorDisplay.style.display = 'block'; // Make sure error is visible
+                errorDisplay.style.display = 'block';
             }
         }
     }
     
+    // --- Clear Functions ---
     function clearInputsAndResults() {
+        if (!essentialElementsPresent && !elements.s_p1_input) { // Check if elements object itself might not be fully populated for some reason
+             console.warn("Clear function called but essential elements might be missing.");
+        }
         try {
-            if(elements.s_p1_input) elements.s_p1_input.value = ''; 
-            if(elements.s_e1_input) elements.s_e1_input.value = '';
-            if(elements.s_p2_input) elements.s_p2_input.value = ''; 
-            if(elements.s_e2_input) elements.s_e2_input.value = '';
-            if(elements.s_p3_input) elements.s_p3_input.value = ''; 
-            if(elements.s_e3_input) elements.s_e3_input.value = '';
-            if(elements.customTargetGradeInput) elements.customTargetGradeInput.value = '70'; // Reset custom target
+            scoreInputIds.forEach(idSuffix => {
+                const inputElement = elements[idSuffix + '_input'];
+                const errorElement = elements[`error_${idSuffix}`];
+                if (inputElement) {
+                    inputElement.value = '';
+                    inputElement.classList.remove('input-invalid');
+                }
+                if (errorElement) {
+                    errorElement.textContent = '';
+                    errorElement.style.display = 'none';
+                }
+                try { // Clear from localStorage as well
+                    localStorage.removeItem(scoreLocalStoragePrefix + idSuffix);
+                } catch (e) {
+                    console.error(`Error removing score ${idSuffix} from localStorage:`, e);
+                }
+            });
+
+            if(elements.customTargetGradeInput) elements.customTargetGradeInput.value = '70';
             clearResultsAndHide();
             updateUIForMode(); 
         } catch (e) {
@@ -246,13 +390,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function clearResultsAndHide() {
         if(elements.totalGradeResultDiv) { elements.totalGradeResultDiv.textContent = ''; elements.totalGradeResultDiv.style.display = 'none'; }
         if(elements.statusResultDiv) { elements.statusResultDiv.textContent = ''; elements.statusResultDiv.style.display = 'none'; }
-        if(elements.neededResultDiv) { elements.neededResultDiv.innerHTML = ''; elements.neededResultDiv.style.display = 'none'; } // Use innerHTML for multi-line
+        if(elements.neededResultDiv) { elements.neededResultDiv.innerHTML = ''; elements.neededResultDiv.style.display = 'none'; }
         if(elements.copyResultsButton) {
             elements.copyResultsButton.style.display = 'none';
             elements.copyResultsButton.removeAttribute('data-summary');
         }
     }
 
+    // --- Event Listeners for Buttons ---
     if (elements.copyResultsButton) {
         elements.copyResultsButton.addEventListener('click', () => {
             const summaryToCopy = elements.copyResultsButton.getAttribute('data-summary');
@@ -263,24 +408,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         setTimeout(() => { elements.copyResultsButton.textContent = '複製結果摘要'; }, 2000);
                     })
                     .catch(err => {
-                        console.error('複製失敗: ', err);
-                        alert('複製失敗，您的瀏覽器可能不支援此功能或未授予權限。');
+                        console.error('複製結果時發生錯誤: ', err);
+                        // alert('複製失敗，您的瀏覽器可能不支援此功能或未授予權限。');
                     });
             } else if (!navigator.clipboard || !navigator.clipboard.writeText) {
-                alert('您的瀏覽器不支援自動複製功能。');
+                // alert('您的瀏覽器不支援自動複製功能。');
             }
         });
     }
 
     if (elements.calculateButton) {
         elements.calculateButton.addEventListener('click', calculateAndDisplay);
-    } else {
-        // Error already logged by initial check
     }
 
     if (elements.clearButton) {
         elements.clearButton.addEventListener('click', clearInputsAndResults);
-    } else {
-        // Error already logged by initial check
     }
 });

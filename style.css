@@ -29,17 +29,17 @@ h1 {
     margin-bottom: 20px;
 }
 
-h2, h3, legend { /* Applied legend styling consistency */
+h2, h3, legend {
     color: #555;
     margin-top: 20px;
     margin-bottom: 10px;
     display: flex; 
     align-items: center; 
 }
-legend { /* Specific to legend as it's not an H tag */
+legend {
     font-weight: bold;
     color: #333;
-    padding: 0 5px; /* Keep original padding */
+    padding: 0 5px;
 }
 
 
@@ -142,44 +142,7 @@ button:hover {
 #statusResult.makeup { color: orange; font-weight: bold;}
 #statusResult.fail { color: red; font-weight: bold;}
 
-/* --- Mobile-Friendly Tooltip Styles --- */
-.tooltip-icon {
-    cursor: pointer;
-    font-size: 0.9em; /* Matched to old .tooltip */
-    color: #777;
-    margin-left: 8px;
-    border: 1px solid #ccc; 
-    border-radius: 50%;
-    width: 18px; /* Slightly bigger for touch */
-    height: 18px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f0f0f0;
-    user-select: none; /* Prevent text selection on click */
-}
-
-.tooltip-text-content {
-    display: none; /* Hidden by default */
-    font-size: 0.9em;
-    color: #333;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 8px 10px;
-    margin-top: 5px;
-    /* Position relative to the container if needed, or just flow block */
-    width: fit-content; /* Adjust width to content */
-    max-width: 90%; /* Prevent overly wide tooltips */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    clear: both; /* Ensure it doesn't mess with flex layouts if placed inside flex items */
-}
-/* Specific styling for tooltips inside flex containers like .score-item */
-.input-group-tooltip .tooltip-text-content {
-    flex-basis: 100%; /* Make it take full width in the next line */
-    margin-left: 0; /* Align left */
-}
-
+/* All tooltip styles have been removed */
 
 #totalGradeResult, #statusResult, #neededResult, #copyResultsButton {
     display: none;

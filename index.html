@@ -3,91 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>學期成績計算機 (v1.5.1)</title> <link rel="stylesheet" href="style.css">
+    <title>學期成績計算機 (v2.0.0)</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>學期成績計算機 (進階版)</h1>
+        <h1>學期成績計算機</h1>
+        
+        <fieldset class="master-scheme-group">
+            <legend>① 選擇計分體系</legend>
+            <div>
+                <input type="radio" name="masterScheme" id="schemeGeneric64" value="generic64" checked>
+                <label for="schemeGeneric64">通用方式 (段考 60%、平時 40%)</label>
+            </div>
+            <div>
+                <input type="radio" name="masterScheme" id="schemeGeneric73" value="generic73">
+                <label for="schemeGeneric73">通用方式 (段考 70%、平時 30%)</label>
+            </div>
+            <div>
+                <input type="radio" name="masterScheme" id="schemeFenghsin" value="fenghsin">
+                <label for="schemeFenghsin">鳳新高中專用</label>
+            </div>
+        </fieldset>
 
-        <div class="options-group">
-            <fieldset>
-                <legend>選擇計分權重</legend>
-                <div>
-                    <input type="radio" id="weightScheme1" name="weightScheme" value="64">
-                    <label for="weightScheme1">段考 60% (各20%)、平時 40% (各40%/3)</label>
-                </div>
-                <div>
-                    <input type="radio" id="weightScheme2" name="weightScheme" value="73">
-                    <label for="weightScheme2">段考 70% (各70%/3)、平時 30% (各10%)</label>
-                </div>
-            </fieldset>
+        <div id="fenghsin-selectors" class="selection-group hidden">
+            <div class="selector-item">
+                <label for="grade-select">② 選擇年級</label>
+                <select id="grade-select" class="custom-select">
+                    <option value="">請選擇...</option>
+                </select>
+            </div>
+            <div class="selector-item">
+                <label for="track-select">③ 選擇組別</label>
+                <select id="track-select" class="custom-select" disabled>
+                    <option value="">請先選擇年級</option>
+                </select>
+            </div>
+            <div class="selector-item">
+                <label for="subject-select">④ 選擇科目</label>
+                <select id="subject-select" class="custom-select" disabled>
+                    <option value="">請先選擇組別</option>
+                </select>
+            </div>
+        </div>
 
-            <fieldset>
+        <div id="calculator-body" class="hidden">
+            <fieldset class="options-group">
                 <legend>選擇計算模式</legend>
                 <div>
-                    <input type="radio" id="modeTotal" name="calculationMode" value="total">
+                    <input type="radio" id="modeTotal" name="calculationMode" value="total" checked>
                     <label for="modeTotal">計算學期總成績</label>
                 </div>
                 <div>
                     <input type="radio" id="modeNeeded" name="calculationMode" value="needed">
-                    <label for="modeNeeded">計算三段段考所需分數 (多目標)</label>
+                    <label for="modeNeeded">計算期末考(三段)所需分數</label>
                 </div>
             </fieldset>
-        </div>
-        
-        <div id="customTargetInputContainer" class="score-item" style="display: none;">
-            <label for="customTargetGrade">您的自訂總成績目標：</label>
-            <input type="number" id="customTargetGrade" min="0" max="100" value="70" placeholder="0-100">
-        </div>
 
-        <div class="scores-input">
-            <h2>輸入各項成績 (0-100)</h2>
-            <div class="score-item">
-                <label for="s_p1">一段平時成績：</label>
-                <input type="number" id="s_p1" min="0" max="100" placeholder="0-100">
-                <span class="error-message" id="error_s_p1"></span>
+            <div id="customTargetInputContainer" class="score-item" style="display: none;">
+                <label for="customTargetGrade">您的自訂總成績目標：</label>
+                <input type="number" id="customTargetGrade" min="0" max="100" value="70" placeholder="0-100">
             </div>
-            <div class="score-item">
-                <label for="s_e1">一段段考成績：</label>
-                <input type="number" id="s_e1" min="0" max="100" placeholder="0-100">
-                <span class="error-message" id="error_s_e1"></span>
-            </div>
-            <div class="score-item">
-                <label for="s_p2">二段平時成績：</label>
-                <input type="number" id="s_p2" min="0" max="100" placeholder="0-100">
-                <span class="error-message" id="error_s_p2"></span>
-            </div>
-            <div class="score-item">
-                <label for="s_e2">二段段考成績：</label>
-                <input type="number" id="s_e2" min="0" max="100" placeholder="0-100">
-                <span class="error-message" id="error_s_e2"></span>
-            </div>
-            <div class="score-item">
-                <label for="s_p3">三段平時成績：</label>
-                <input type="number" id="s_p3" min="0" max="100" placeholder="0-100">
-                <span class="error-message" id="error_s_p3"></span>
-            </div>
-            <div class="score-item" id="s_e3_item">
-                <label for="s_e3">三段段考成績：</label>
-                <input type="number" id="s_e3" min="0" max="100" placeholder="0-100">
-                <span class="error-message" id="error_s_e3"></span>
-            </div>
-        </div>
 
-        <button id="calculateButton">計算</button>
-        <button id="clearButton">清除</button>
-        <button id="copyResultsButton" style="display: none;">複製結果摘要</button>
+            <div class="scores-input">
+                <h2>輸入各項成績 (0-100)</h2>
+                <div class="score-item">
+                    <label for="s_p1">平時成績(一)</label>
+                    <input type="number" id="s_p1" min="0" max="100" placeholder="0-100">
+                    <span class="error-message" id="error_s_p1"></span>
+                </div>
+                <div class="score-item">
+                    <label for="s_p2">平時成績(二)</label>
+                    <input type="number" id="s_p2" min="0" max="100" placeholder="0-100">
+                    <span class="error-message" id="error_s_p2"></span>
+                </div>
+                <div class="score-item">
+                    <label for="s_p3">平時成績(三)</label>
+                    <input type="number" id="s_p3" min="0" max="100" placeholder="0-100">
+                    <span class="error-message" id="error_s_p3"></span>
+                </div>
+                <div class="score-item exam-score">
+                    <label for="s_e1">期一考 (一段)</label>
+                    <input type="number" id="s_e1" min="0" max="100" placeholder="0-100">
+                    <span class="error-message" id="error_s_e1"></span>
+                </div>
+                <div class="score-item exam-score">
+                    <label for="s_e2">期二考 (二段)</label>
+                    <input type="number" id="s_e2" min="0" max="100" placeholder="0-100">
+                    <span class="error-message" id="error_s_e2"></span>
+                </div>
+                <div class="score-item exam-score" id="s_e3_item">
+                    <label for="s_e3">期末考 (三段)</label>
+                    <input type="number" id="s_e3" min="0" max="100" placeholder="0-100">
+                    <span class="error-message" id="error_s_e3"></span>
+                </div>
+            </div>
 
-        <div id="results" class="results-output">
-            <h3>計算結果：</h3>
-            <div id="totalGradeResult" class="result-item"></div>
-            <div id="statusResult" class="result-item"></div>
-            <div id="neededResult" class="result-item"></div> 
+            <button id="calculateButton">計算</button>
+            <button id="clearButton">清除</button>
+            <button id="copyResultsButton" style="display: none;">複製結果摘要</button>
+
+            <div id="results" class="results-output">
+                <div id="selected-weights-display" class="result-item small-text"></div>
+                <h3>計算結果：</h3>
+                <div id="totalGradeResult" class="result-item"></div>
+                <div id="statusResult" class="result-item"></div>
+                <div id="neededResult" class="result-item"></div> 
+            </div>
         </div>
     </div> 
 
     <footer>
-        <p>版本 1.5.1 (2025-05-08)</p> <p>本工具 由Jeter Du開發設計</p>
+        <p>版本 2.0.0 (2025-06-17)</p>
+        <p>本工具 由Jeter Du開發設計</p>
         <p>由Randy Chxng & Hardy Tsai 功能發想、測試</p>
         <p>本工具誕生於2025/01/09</p>
         <p>原始製作想法來自 <a href="https://score.dabo.xyz/" target="_blank" rel="noopener noreferrer">https://score.dabo.xyz/</a></p>

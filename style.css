@@ -32,6 +32,8 @@
 
     --card-shadow: rgba(0,0,0,0.08);
     --grouped-item-shadow: rgba(0,0,0,0.03);
+    
+    --select-arrow-color: '%238E8E93'; /* URL encoded #8E8E93 */
 }
 
 /* --- Dark Theme Variable Overrides (Using Media Query) --- */
@@ -51,11 +53,9 @@
         --accent-blue-hover: #0060c0; 
 
         --button-secondary-bg: #2c2c2e; 
-        /* --button-secondary-text: var(--accent-blue); /* Already uses accent-blue */
         --button-secondary-hover-bg: #3a3a3c;
 
         --input-bg: #2c2c2e; 
-        /* --input-border: var(--separator-color); /* Already uses separator-color */
         --input-focus-shadow: rgba(10, 132, 255, 0.4); 
 
         --status-pass: #30D158;   
@@ -63,17 +63,14 @@
         --status-fail: #FF453A;   
         --status-fail-shadow: rgba(255, 69, 58, 0.4);
             
-        /* --results-bg: transparent; /* Stays transparent */
-        /* --footer-bg: var(--system-background); /* Already uses system-background */
-        /* --link-color: var(--accent-blue); /* Already uses accent-blue */
-
         --card-shadow: rgba(0,0,0,0.25); 
         --grouped-item-shadow: rgba(0,0,0,0.15);
+        
+        --select-arrow-color: '%23636366'; /* URL encoded #636366 */
     }
 }
 
-/* --- Apply Variables to Styles --- */
-
+/* --- Base & General Styles --- */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     line-height: 1.5;
@@ -101,16 +98,11 @@ body {
     transition: background-color 0.3s ease, box-shadow 0.3s ease; 
 }
 
-/* Theme Toggle Button styles REMOVED */
-/* .header-utils { ... } */
-/* #themeToggleButton { ... } */
-
 h1 {
     font-size: 28px;
     font-weight: 600; 
     text-align: center;
     color: var(--text-primary);
-    /* margin-top: 10px; /* Revert if needed */
     margin-bottom: 25px;
 }
 
@@ -146,233 +138,107 @@ legend {
     align-items: center; 
 }
 
-.options-group {
-    display: flex;
-    flex-direction: column;
-    gap: 25px; 
-    margin-bottom: 25px;
+.hidden {
+    display: none !important;
 }
 
-fieldset {
+/* --- Grouping & Selection Styles --- */
+fieldset, .selection-group, .scores-input {
     border: none; 
     border-radius: 10px; 
     padding: 0; 
-    margin: 0; 
+    margin: 0 0 25px 0; 
     background-color: var(--content-background); 
     box-shadow: 0 1px 1px var(--grouped-item-shadow); 
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.options-group div {
-    margin-bottom: 0; 
-    padding: 11px 15px; 
-    display: flex; 
-    align-items: center;
+.selection-group {
+    padding: 15px;
 }
 
-.options-group div:not(:last-child) {
-    border-bottom: 1px solid var(--separator-color); 
-    transition: border-color 0.3s ease;
-}
-
-.options-group label, .score-item label { 
-    margin-left: 0; 
-    cursor: pointer;
-    font-size: 16px;
-    color: var(--text-primary); 
-    transition: color 0.3s ease;
-}
-
-.score-item {
+.selector-item {
     display: flex;
     align-items: center;
     gap: 10px;
-    flex-wrap: wrap; 
-    padding: 8px 15px; 
+    padding: 8px 0;
 }
-.scores-input { 
-    background-color: var(--content-background);
-    border-radius: 10px;
-    padding-top: 5px; 
-    padding-bottom: 5px;
-    box-shadow: 0 1px 1px var(--grouped-item-shadow);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-.scores-input h2 {
-    margin-left: 15px; 
-    margin-bottom: 8px;
-    margin-top: 15px;
-}
-.score-item:not(:last-child) {
-    border-bottom: 1px solid var(--separator-color);
-    transition: border-color 0.3s ease;
-}
-
-.score-item label {
-    flex-basis: 170px; 
+.selector-item label {
+    font-weight: 600;
+    color: var(--text-primary);
+    flex-basis: 100px;
     flex-shrink: 0;
+    padding-left: 2px;
 }
-
-input[type="number"] {
-    padding: 10px 12px;
+.custom-select {
+    flex-grow: 1;
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: var(--input-bg);
     border: 1px solid var(--input-border);
     border-radius: 8px;
-    width: 100px; 
-    box-sizing: border-box;
-    font-size: 16px; 
-    background-color: var(--input-bg); 
+    padding: 10px 30px 10px 12px;
+    font-size: 16px;
     color: var(--text-primary);
-    text-align: right; 
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'><path fill='none' stroke='var(--select-arrow-color, %238E8E93)' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m1 1 4 4 4-4'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 10px 6px;
+    transition: all 0.3s ease;
 }
-input[type="number"]:focus { 
-    border-color: var(--accent-blue); /* Changed back to --accent-blue as it will switch */
+.custom-select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--input-bg);
+}
+.custom-select:focus {
+    border-color: var(--accent-blue);
     outline: none; 
     box-shadow: 0 0 0 2px var(--input-focus-shadow); 
 }
-input[type="number"].input-invalid {
-    border-color: var(--status-fail);
-    box-shadow: 0 0 0 2px var(--status-fail-shadow); 
-}
-.error-message {
-    font-size: 13px;
-    color: var(--status-fail);
-    margin-top: 4px;
-    flex-basis: 100%; 
-    margin-left: calc(170px + 12px + 15px); /* Adjust if layout changes */
-    display: none; 
-    transition: color 0.3s ease;
-}
 
+/* Calculation Mode & Score Input Styles */
+.options-group div { margin-bottom: 0; padding: 11px 15px; display: flex; align-items: center; }
+.options-group div:not(:last-child) { border-bottom: 1px solid var(--separator-color); transition: border-color 0.3s ease; }
+.options-group label, .score-item label { margin-left: 0; cursor: pointer; font-size: 16px; color: var(--text-primary); transition: color 0.3s ease; }
 
-input[type="radio"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 22px;
-    height: 22px;
-    border: 1.5px solid var(--separator-color);
-    border-radius: 50%;
-    position: relative;
-    outline: none;
-    margin-right: 12px; 
-    vertical-align: middle;
-    flex-shrink: 0; 
-    cursor: pointer;
-    background-color: var(--content-background); 
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-input[type="radio"]:checked {
-    border-color: var(--accent-blue); 
-    background-color: var(--accent-blue); 
-}
-input[type="radio"]:checked::after { 
-    content: '';
-    display: block;
-    width: 10px; 
-    height: 10px;
-    background: var(--content-background); 
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: background-color 0.3s ease;
-}
-.options-group div > label { 
-    flex-grow: 1; 
-}
+.score-item { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 15px; }
+.scores-input { padding-top: 5px; padding-bottom: 5px; }
+.scores-input h2 { margin-left: 15px; margin-bottom: 8px; margin-top: 15px; }
+.score-item:not(:last-child) { border-bottom: 1px solid var(--separator-color); transition: border-color 0.3s ease; }
+.score-item label { flex-basis: 170px; flex-shrink: 0; }
 
-button {
-    display: inline-block;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 17px; 
-    padding: 12px 20px;
-    margin-top: 25px; 
-    margin-right: 10px;
-    transition: background-color 0.2s ease, opacity 0.2s ease, color 0.2s ease; 
-    text-align: center;
-    min-width: 100px; 
-}
-button:active { 
-    opacity: 0.7;
-}
+input[type="number"] { padding: 10px 12px; border: 1px solid var(--input-border); border-radius: 8px; width: 100px; box-sizing: border-box; font-size: 16px; background-color: var(--input-bg); color: var(--text-primary); text-align: right; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+input[type="number"]:focus { border-color: var(--accent-blue); outline: none; box-shadow: 0 0 0 2px var(--input-focus-shadow); }
+input[type="number"].input-invalid { border-color: var(--status-fail); box-shadow: 0 0 0 2px var(--status-fail-shadow); }
+.error-message { font-size: 13px; color: var(--status-fail); margin-top: 4px; flex-basis: 100%; margin-left: calc(170px + 10px); display: none; transition: color 0.3s ease; }
 
-#calculateButton {
-    background-color: var(--accent-blue); 
-    color: white; 
-    font-weight: 600; 
-}
-#calculateButton:hover {
-    background-color: var(--accent-blue-hover); 
-}
+input[type="radio"] { appearance: none; -webkit-appearance: none; width: 22px; height: 22px; border: 1.5px solid var(--separator-color); border-radius: 50%; position: relative; outline: none; margin-right: 12px; vertical-align: middle; flex-shrink: 0; cursor: pointer; background-color: var(--content-background); transition: background-color 0.3s ease, border-color 0.3s ease; }
+input[type="radio"]:checked { border-color: var(--accent-blue); background-color: var(--accent-blue); }
+input[type="radio"]:checked::after { content: ''; display: block; width: 10px; height: 10px; background: var(--content-background); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: background-color 0.3s ease; }
+.options-group div > label { flex-grow: 1; }
 
-#clearButton, #copyResultsButton { 
-    background-color: var(--button-secondary-bg); 
-    color: var(--button-secondary-text); 
-    font-weight: 500; 
-}
-#clearButton:hover, #copyResultsButton:hover {
-    background-color: var(--button-secondary-hover-bg); 
-}
+/* --- Buttons --- */
+button { display: inline-block; border: none; border-radius: 8px; cursor: pointer; font-size: 17px; padding: 12px 20px; margin-top: 25px; margin-right: 10px; transition: background-color 0.2s ease, opacity 0.2s ease, color 0.2s ease; text-align: center; min-width: 100px; }
+button:active { opacity: 0.7; }
+#calculateButton { background-color: var(--accent-blue); color: white; font-weight: 600; }
+#calculateButton:hover { background-color: var(--accent-blue-hover); }
+#clearButton, #copyResultsButton { background-color: var(--button-secondary-bg); color: var(--button-secondary-text); font-weight: 500; }
+#clearButton:hover, #copyResultsButton:hover { background-color: var(--button-secondary-hover-bg); }
 
-.results-output {
-    margin-top: 25px;
-    padding: 15px;
-    background-color: var(--results-bg); 
-    border: none; 
-    border-radius: 8px; 
-    transition: background-color 0.3s ease;
-}
-.results-output h3 { 
-    margin-left: 0; 
-    padding-left: 0;
-}
-
-.result-item {
-    margin-bottom: 12px; 
-    font-size: 1.05em; 
-    line-height: 1.5; 
-    padding: 8px 0; 
-    color: var(--text-primary); 
-    transition: color 0.3s ease;
-}
-
+/* --- Results --- */
+.results-output { margin-top: 25px; padding: 15px; background-color: var(--results-bg); border: none; border-radius: 8px; transition: background-color 0.3s ease; }
+.results-output h3 { margin-left: 0; padding-left: 0; }
+.result-item { margin-bottom: 12px; font-size: 1.05em; line-height: 1.5; padding: 8px 0; color: var(--text-primary); transition: color 0.3s ease; }
+#selected-weights-display.small-text { font-size: 14px; color: var(--text-secondary); text-align: center; margin-bottom: -10px; margin-top: -10px; }
 #statusResult.pass { color: var(--status-pass); font-weight: 600;} 
 #statusResult.makeup { color: var(--status-makeup); font-weight: 600;} 
 #statusResult.fail { color: var(--status-fail); font-weight: 600;} 
+#totalGradeResult, #statusResult, #neededResult, #copyResultsButton, #selected-weights-display { display: none; }
 
-
-#totalGradeResult, #statusResult, #neededResult, #copyResultsButton {
-    display: none; 
-}
-
-footer {
-    text-align: center; 
-    margin-top: 30px;   
-    padding: 20px 15px; 
-    border-top: 1px solid var(--separator-opaque); 
-    width: 100%; 
-    box-sizing: border-box; 
-    background-color: var(--footer-bg); 
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-footer p {
-    font-size: 13px;  
-    color: var(--text-tertiary); 
-    margin: 4px 0;     
-    line-height: 1.4;  
-    transition: color 0.3s ease;
-}
-
-footer a { 
-    color: var(--link-color); 
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
+/* --- Footer --- */
+footer { text-align: center; margin-top: 30px; padding: 20px 15px; border-top: 1px solid var(--separator-opaque); width: 100%; box-sizing: border-box; background-color: var(--footer-bg); transition: background-color 0.3s ease, border-color 0.3s ease; }
+footer p { font-size: 13px; color: var(--text-tertiary); margin: 4px 0; line-height: 1.4; transition: color 0.3s ease; }
+footer a { color: var(--link-color); text-decoration: none; transition: color 0.3s ease; }
+footer a:hover { text-decoration: underline; }

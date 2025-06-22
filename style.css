@@ -151,32 +151,49 @@ fieldset, .selection-group {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+.master-scheme-group div {
+    margin-bottom: 0; 
+    padding: 11px 15px; 
+    display: flex; 
+    align-items: center;
+}
+.master-scheme-group div:not(:last-child) {
+    border-bottom: 1px solid var(--separator-color); 
+    transition: border-color 0.3s ease;
+}
+
 .selection-group { padding: 15px; }
 .selector-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; }
 .selector-item label { font-weight: 600; color: var(--text-primary); flex-basis: 100px; flex-shrink: 0; padding-left: 2px; }
-.custom-select {
+
+/* Combined styles for dropdowns and new class input */
+.custom-select, .custom-input {
     flex-grow: 1;
     appearance: none; -webkit-appearance: none;
     background-color: var(--input-bg);
     border: 1px solid var(--input-border);
     border-radius: 8px;
-    padding: 10px 30px 10px 12px;
+    padding: 10px 12px;
     font-size: 16px;
     color: var(--text-primary);
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+.custom-select {
+    padding-right: 30px; /* Make space for arrow */
     background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'><path fill='none' stroke='var(--select-arrow-color, %238E8E93)' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m1 1 4 4 4-4'/></svg>");
     background-repeat: no-repeat;
     background-position: right 12px center;
     background-size: 10px 6px;
-    transition: all 0.3s ease;
 }
-.custom-select:disabled { opacity: 0.5; cursor: not-allowed; background-color: var(--input-bg); }
-.custom-select:focus { border-color: var(--accent-blue); outline: none; box-shadow: 0 0 0 2px var(--input-focus-shadow); }
+.custom-select:disabled, .custom-input:disabled { opacity: 0.5; cursor: not-allowed; background-color: var(--input-bg); }
+.custom-select:focus, .custom-input:focus { border-color: var(--accent-blue); outline: none; box-shadow: 0 0 0 2px var(--input-focus-shadow); }
 
 /* Calculation Mode & Score Input Styles */
 .options-group div { margin-bottom: 0; padding: 11px 15px; display: flex; align-items: center; }
 .options-group div:not(:last-child) { border-bottom: 1px solid var(--separator-color); transition: border-color 0.3s ease; }
 .options-group label, .score-item label { margin-left: 0; cursor: pointer; font-size: 16px; color: var(--text-primary); transition: color 0.3s ease; }
+
 .score-item { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 15px; }
 .scores-input { background-color: var(--content-background); border-radius: 10px; padding-top: 5px; padding-bottom: 5px; box-shadow: 0 1px 1px var(--grouped-item-shadow); transition: background-color 0.3s ease, box-shadow 0.3s ease; margin-bottom: 25px; }
 .scores-input h2 { margin-left: 15px; margin-bottom: 8px; margin-top: 15px; }
@@ -191,7 +208,7 @@ input[type="number"].input-invalid { border-color: var(--status-fail); box-shado
 input[type="radio"] { appearance: none; -webkit-appearance: none; width: 22px; height: 22px; border: 1.5px solid var(--separator-color); border-radius: 50%; position: relative; outline: none; margin-right: 12px; vertical-align: middle; flex-shrink: 0; cursor: pointer; background-color: var(--content-background); transition: background-color 0.3s ease, border-color 0.3s ease; }
 input[type="radio"]:checked { border-color: var(--accent-blue); background-color: var(--accent-blue); }
 input[type="radio"]:checked::after { content: ''; display: block; width: 10px; height: 10px; background: var(--content-background); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: background-color 0.3s ease; }
-.options-group div > label { flex-grow: 1; }
+.options-group div > label, .master-scheme-group div > label { flex-grow: 1; }
 
 /* --- Buttons --- */
 button { display: inline-block; border: none; border-radius: 8px; cursor: pointer; font-size: 17px; padding: 12px 20px; margin-top: 25px; margin-right: 10px; transition: background-color 0.2s ease, opacity 0.2s ease, color 0.2s ease; text-align: center; min-width: 100px; }
@@ -205,7 +222,7 @@ button:active { opacity: 0.7; }
 .results-output { margin-top: 25px; padding: 15px; background-color: var(--results-bg); border: none; border-radius: 8px; transition: background-color 0.3s ease; }
 .results-output h3 { margin-left: 0; padding-left: 0; }
 .result-item { margin-bottom: 12px; font-size: 1.05em; line-height: 1.5; padding: 8px 0; color: var(--text-primary); transition: color 0.3s ease; }
-#selected-weights-display.small-text { font-size: 14px; color: var(--text-secondary); text-align: center; margin-bottom: -10px; margin-top: -10px; }
+#selected-weights-display.small-text { font-size: 14px; color: var(--text-secondary); text-align: center; margin-bottom: -10px; margin-top: -10px; padding: 0; }
 #statusResult.pass { color: var(--status-pass); font-weight: 600;} 
 #statusResult.makeup { color: var(--status-makeup); font-weight: 600;} 
 #statusResult.fail { color: var(--status-fail); font-weight: 600;} 

@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return radios[i].value;
             }
         }
-        return null; // Should not happen if HTML has a default checked
+        return null; 
     }
 
     // --- UI POPULATION & STATE MANAGEMENT ---
@@ -144,6 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     function displaySelectedWeights() { const weights = getWeights(); if (weights && elements.weightsDisplay) { const examPercent = (weights.exam * 100).toFixed(1).replace(/\.0$/, ''); const formativePercent = (weights.formative * 100).toFixed(1).replace(/\.0$/, ''); elements.weightsDisplay.textContent = `當前權重：定期 ${examPercent}%, 平時 ${formativePercent}%`; elements.weightsDisplay.style.display = 'block'; } else { if(elements.weightsDisplay) elements.weightsDisplay.style.display = 'none'; } }
+    
     function calculateAndDisplay() {
         let allInputsValid = true; scoreInputIds.forEach(id => { const currentInput = elements.scoresInputs[id]; if (currentInput && currentInput.closest('.score-item') && !currentInput.closest('.score-item').classList.contains('hidden')) { if (!validateScoreInput(currentInput)) { allInputsValid = false; } } });
         if (!allInputsValid) { alert("部分成績輸入無效 (例如超出0-100範圍)，請修正紅色提示的欄位後再計算。"); return; }
@@ -151,10 +152,18 @@ document.addEventListener('DOMContentLoaded', () => {
         displaySelectedWeights();
         const scores = {}; scoreInputIds.forEach(id => { scores[id] = parseFloat(elements.scoresInputs[id].value) || 0; });
         const masterScheme = getSelectedRadioValue('masterScheme');
+        
+        // ** THE FIX IS HERE **
+        const checkedMasterRadio = document.querySelector('input[name="masterScheme"]:checked');
+        const masterSchemeLabelText = checkedMasterRadio ? checkedMasterRadio.labels[0].textContent.trim() : '未知計分方式';
+        let calculationSummary = `計分方式: ${masterSchemeLabelText}\n`;
+        // ** END FIX **
+
+        if (masterScheme === 'fenghsin') { calculationSummary += `選擇: ${elements.gradeSelect.options[elements.gradeSelect.selectedIndex].text}, ${elements.trackSelect.options[elements.trackSelect.selectedIndex].text}, ${elements.subjectSelect.value}\n`; }
+        
         const formativeScoreComponent = (masterScheme === 'fenghsin') ? scores.s_p1 : (scores.s_p1 + scores.s_p2 + scores.s_p3) / 3;
         const calcMode = getSelectedRadioValue('calculationMode');
-        let calculationSummary = `計分方式: ${document.querySelector(`label[for="${masterScheme}"]`).textContent.trim()}\n`;
-        if (masterScheme === 'fenghsin') { calculationSummary += `選擇: ${elements.gradeSelect.options[elements.gradeSelect.selectedIndex].text}, ${elements.trackSelect.options[elements.trackSelect.selectedIndex].text}, ${elements.subjectSelect.value}\n`; }
+        
         clearResultsAndHide(true);
         if (calcMode === 'total') {
             const avgExam = (scores.s_e1 + scores.s_e2 + scores.s_e3) / 3;

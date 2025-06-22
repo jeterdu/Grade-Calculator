@@ -106,41 +106,18 @@ h1 {
     margin-bottom: 25px;
 }
 
-h2 { 
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-top: 25px;
-    margin-bottom: 15px;
+h2, h3, legend {
+    color: var(--text-secondary);
+    margin-top: 20px;
+    margin-bottom: 10px;
     display: flex; 
     align-items: center; 
 }
+h2 { font-size: 20px; font-weight: 600; color: var(--text-primary); }
+h3 { font-size: 17px; font-weight: 600; }
+legend { font-size: 15px; font-weight: 400; color: var(--text-quaternary); padding: 0 2px; margin-bottom: 8px; margin-left: 13px; text-transform: uppercase; }
 
-h3 { 
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--text-secondary); 
-    margin-top: 25px;
-    margin-bottom: 15px;
-    display: flex; 
-    align-items: center; 
-}
-
-legend { 
-    font-size: 15px; 
-    font-weight: 400; 
-    color: var(--text-quaternary);   
-    padding: 0 2px;
-    margin-bottom: 8px; 
-    margin-left: 13px; 
-    text-transform: uppercase; 
-    display: flex; 
-    align-items: center; 
-}
-
-.hidden {
-    display: none !important;
-}
+.hidden { display: none !important; }
 
 /* --- Grouping & Selection Styles --- */
 fieldset, .selection-group, .scores-input {
@@ -153,27 +130,12 @@ fieldset, .selection-group, .scores-input {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.selection-group {
-    padding: 15px;
-}
-
-.selector-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 0;
-}
-.selector-item label {
-    font-weight: 600;
-    color: var(--text-primary);
-    flex-basis: 100px;
-    flex-shrink: 0;
-    padding-left: 2px;
-}
+.selection-group { padding: 15px; }
+.selector-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; }
+.selector-item label { font-weight: 600; color: var(--text-primary); flex-basis: 100px; flex-shrink: 0; padding-left: 2px; }
 .custom-select {
     flex-grow: 1;
-    appearance: none;
-    -webkit-appearance: none;
+    appearance: none; -webkit-appearance: none;
     background-color: var(--input-bg);
     border: 1px solid var(--input-border);
     border-radius: 8px;
@@ -187,22 +149,13 @@ fieldset, .selection-group, .scores-input {
     background-size: 10px 6px;
     transition: all 0.3s ease;
 }
-.custom-select:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background-color: var(--input-bg);
-}
-.custom-select:focus {
-    border-color: var(--accent-blue);
-    outline: none; 
-    box-shadow: 0 0 0 2px var(--input-focus-shadow); 
-}
+.custom-select:disabled { opacity: 0.5; cursor: not-allowed; background-color: var(--input-bg); }
+.custom-select:focus { border-color: var(--accent-blue); outline: none; box-shadow: 0 0 0 2px var(--input-focus-shadow); }
 
 /* Calculation Mode & Score Input Styles */
 .options-group div { margin-bottom: 0; padding: 11px 15px; display: flex; align-items: center; }
 .options-group div:not(:last-child) { border-bottom: 1px solid var(--separator-color); transition: border-color 0.3s ease; }
 .options-group label, .score-item label { margin-left: 0; cursor: pointer; font-size: 16px; color: var(--text-primary); transition: color 0.3s ease; }
-
 .score-item { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 15px; }
 .scores-input { padding-top: 5px; padding-bottom: 5px; }
 .scores-input h2 { margin-left: 15px; margin-bottom: 8px; margin-top: 15px; }

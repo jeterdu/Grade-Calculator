@@ -106,21 +106,42 @@ h1 {
     margin-bottom: 25px;
 }
 
-h2, h3, legend {
-    color: var(--text-secondary);
-    margin-top: 20px;
-    margin-bottom: 10px;
+h2 { 
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 25px;
+    margin-bottom: 15px;
     display: flex; 
     align-items: center; 
 }
-h2 { font-size: 20px; font-weight: 600; color: var(--text-primary); }
-h3 { font-size: 17px; font-weight: 600; }
-legend { font-size: 15px; font-weight: 400; color: var(--text-quaternary); padding: 0 2px; margin-bottom: 8px; margin-left: 13px; text-transform: uppercase; }
+
+h3 { 
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-secondary); 
+    margin-top: 25px;
+    margin-bottom: 15px;
+    display: flex; 
+    align-items: center; 
+}
+
+legend { 
+    font-size: 15px; 
+    font-weight: 400; 
+    color: var(--text-quaternary);   
+    padding: 0 2px;
+    margin-bottom: 8px; 
+    margin-left: 13px; 
+    text-transform: uppercase; 
+    display: flex; 
+    align-items: center; 
+}
 
 .hidden { display: none !important; }
 
 /* --- Grouping & Selection Styles --- */
-fieldset, .selection-group, .scores-input {
+fieldset, .selection-group {
     border: none; 
     border-radius: 10px; 
     padding: 0; 
@@ -157,7 +178,7 @@ fieldset, .selection-group, .scores-input {
 .options-group div:not(:last-child) { border-bottom: 1px solid var(--separator-color); transition: border-color 0.3s ease; }
 .options-group label, .score-item label { margin-left: 0; cursor: pointer; font-size: 16px; color: var(--text-primary); transition: color 0.3s ease; }
 .score-item { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 15px; }
-.scores-input { padding-top: 5px; padding-bottom: 5px; }
+.scores-input { background-color: var(--content-background); border-radius: 10px; padding-top: 5px; padding-bottom: 5px; box-shadow: 0 1px 1px var(--grouped-item-shadow); transition: background-color 0.3s ease, box-shadow 0.3s ease; margin-bottom: 25px; }
 .scores-input h2 { margin-left: 15px; margin-bottom: 8px; margin-top: 15px; }
 .score-item:not(:last-child) { border-bottom: 1px solid var(--separator-color); transition: border-color 0.3s ease; }
 .score-item label { flex-basis: 170px; flex-shrink: 0; }

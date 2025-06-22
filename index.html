@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>學分狗成績計算機 (v2.0.2)</title>
+    <title>學分狗成績計算機 (v2.1.0)</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -56,7 +56,7 @@
                 </div>
                 <div>
                     <input type="radio" id="modeNeeded" name="calculationMode" value="needed">
-                    <label for="modeNeeded">計算期末考(三段)所需分數</label>
+                    <label for="modeNeeded">計算期末考所需分數</label>
                 </div>
             </fieldset>
 
@@ -65,39 +65,7 @@
                 <input type="number" id="customTargetGrade" min="0" max="100" value="70" placeholder="0-100">
             </div>
 
-            <div class="scores-input">
-                <h2>輸入各項成績 (0-100)</h2>
-                <div class="score-item">
-                    <label for="s_p1">平時成績(一)</label>
-                    <input type="number" id="s_p1" min="0" max="100" placeholder="0-100">
-                    <span class="error-message" id="error_s_p1"></span>
-                </div>
-                <div class="score-item">
-                    <label for="s_p2">平時成績(二)</label>
-                    <input type="number" id="s_p2" min="0" max="100" placeholder="0-100">
-                    <span class="error-message" id="error_s_p2"></span>
-                </div>
-                <div class="score-item">
-                    <label for="s_p3">平時成績(三)</label>
-                    <input type="number" id="s_p3" min="0" max="100" placeholder="0-100">
-                    <span class="error-message" id="error_s_p3"></span>
-                </div>
-                <div class="score-item exam-score">
-                    <label for="s_e1">期一考 (一段)</label>
-                    <input type="number" id="s_e1" min="0" max="100" placeholder="0-100">
-                    <span class="error-message" id="error_s_e1"></span>
-                </div>
-                <div class="score-item exam-score">
-                    <label for="s_e2">期二考 (二段)</label>
-                    <input type="number" id="s_e2" min="0" max="100" placeholder="0-100">
-                    <span class="error-message" id="error_s_e2"></span>
-                </div>
-                <div class="score-item exam-score" id="s_e3_item">
-                    <label for="s_e3">期末考 (三段)</label>
-                    <input type="number" id="s_e3" min="0" max="100" placeholder="0-100">
-                    <span class="error-message" id="error_s_e3"></span>
-                </div>
-            </div>
+            <div id="score-inputs-container"></div>
 
             <button id="calculateButton">計算</button>
             <button id="clearButton">清除</button>
@@ -114,7 +82,7 @@
     </div> 
 
     <footer>
-        <p>版本 2.0.2 (2025-06-22)</p>
+        <p>版本 2.1.0 (2025-06-22)</p>
         <p>本工具 由Jeter Du開發設計</p>
         <p>由Randy Chxng & Hardy Tsai 功能發想、測試</p>
         <p>本工具誕生於2025/01/09</p>

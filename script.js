@@ -1,86 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- DATA: Feng Hsin High School Precise Rules ---
     const FENG_HSIN_RULES = {
-        g10: {
-            label: '高一',
-            tracks: {
-                all: {
-                    label: '不分組',
-                    subjects: {
-                        '國文':       { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 },
-                        '英文':       { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 },
-                        '數學':       { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 },
-                        '歷史':       { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 },
-                        '地理':       { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 },
-                        '公民與社會':   { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 },
-                        '物理':       { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 },
-                        '化學':       { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 },
-                        '生物':       { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 },
-                        '地球科學':   { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 },
-                        '藝能科(美術)': { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 },
-                        '藝能科(書法)': { w_e1: 0.30, w_e2: 0.30, w_e3: 0.00, w_f: 0.40 }, // Assuming 期末 is 0 if not listed
-                        '藝能科(創客實現)':{ w_e1: 0.15, w_e2: 0.15, w_e3: 0.20, w_f: 0.50 }
-                    }
-                }
-            }
-        },
-        g11: {
-            label: '高二',
-            tracks: {
-                natural: {
-                    label: '自然組',
-                    subjects: {
-                        '國文':       { w_e1: 0.20, w_e2: 0.20, w_e3: 0.30, w_f: 0.30 },
-                        '英文':       { w_e1: 0.13, w_e2: 0.13, w_e3: 0.14, w_f: 0.60 },
-                        '數學A':      { w_e1: 0.20, w_e2: 0.20, w_e3: 0.40, w_f: 0.20 },
-                        '歷史':       { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 },
-                        '地理':       { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 },
-                        '公民與社會':   { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 },
-                        '物理':       { w_e1: 0.10, w_e2: 0.10, w_e3: 0.10, w_f: 0.70 },
-                        '化學':       { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 },
-                        '生物':       { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 }
-                    }
-                },
-                social: {
-                    label: '社會組',
-                    subjects: {
-                        '國文':       { w_e1: 0.20, w_e2: 0.20, w_e3: 0.30, w_f: 0.30 },
-                        '英文':       { w_e1: 0.13, w_e2: 0.13, w_e3: 0.14, w_f: 0.60 },
-                        '數學B':      { w_e1: 0.20, w_e2: 0.20, w_e3: 0.40, w_f: 0.20 },
-                        '歷史':       { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 },
-                        '地理':       { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 },
-                        '公民與社會':   { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 }
-                    }
-                }
-            }
-        },
-        g12: {
-            label: '高三',
-            tracks: {
-                natural: {
-                    label: '自然組',
-                    subjects: {
-                        '國文':       { w_e1: 0.20, w_e2: 0.20, w_e3: 0.30, w_f: 0.30 },
-                        '英文':       { w_e1: 0.13, w_e2: 0.13, w_e3: 0.14, w_f: 0.60 },
-                        '數學甲':     { w_e1: 0.30, w_e2: 0.30, w_e3: 0.40, w_f: 0.00 }, // Assuming 平時 is 0 if not listed
-                        '物理(物質構造)': { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 },
-                        '化學(有機)':   { w_e1: 0.30, w_e2: 0.30, w_e3: 0.00, w_f: 0.40 },
-                        '生物(生態)':   { w_e1: 0.35, w_e2: 0.35, w_e3: 0.00, w_f: 0.30 }
-                    }
-                },
-                social: {
-                    label: '社會組',
-                    subjects: {
-                        '國文':       { w_e1: 0.20, w_e2: 0.20, w_e3: 0.30, w_f: 0.30 },
-                        '英文':       { w_e1: 0.13, w_e2: 0.13, w_e3: 0.14, w_f: 0.60 },
-                        '數學乙':     { w_e1: 0.25, w_e2: 0.25, w_e3: 0.50, w_f: 0.00 },
-                        '歷史':       { w_e1: 0.30, w_e2: 0.30, w_e3: 0.00, w_f: 0.40 },
-                        '地理':       { w_e1: 0.25, w_e2: 0.25, w_e3: 0.00, w_f: 0.50 },
-                        '公民與社會':   { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 }
-                    }
-                }
-            }
-        }
+        g10: { label: '高一', tracks: { all: { label: '不分組', subjects: { '國文': { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 }, '英文': { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 }, '數學': { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 }, '歷史': { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 }, '地理': { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 }, '公民與社會':   { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 }, '物理': { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 }, '化學': { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 }, '生物': { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 }, '地球科學':   { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 }, '藝能科(美術)': { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 }, '藝能科(書法)': { w_e1: 0.30, w_e2: 0.30, w_e3: 0.00, w_f: 0.40 }, '藝能科(創客實現)':{ w_e1: 0.15, w_e2: 0.15, w_e3: 0.20, w_f: 0.50 } } } } },
+        g11: { label: '高二', tracks: { natural: { label: '自然組', subjects: { '國文': { w_e1: 0.20, w_e2: 0.20, w_e3: 0.30, w_f: 0.30 }, '英文': { w_e1: 0.13, w_e2: 0.13, w_e3: 0.14, w_f: 0.60 }, '數學A':      { w_e1: 0.20, w_e2: 0.20, w_e3: 0.40, w_f: 0.20 }, '歷史':       { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 }, '地理':       { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 }, '公民與社會':   { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 }, '物理':       { w_e1: 0.10, w_e2: 0.10, w_e3: 0.10, w_f: 0.70 }, '化學':       { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 }, '生物':       { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 } } }, social: { label: '社會組', subjects: { '國文': { w_e1: 0.20, w_e2: 0.20, w_e3: 0.30, w_f: 0.30 }, '英文': { w_e1: 0.13, w_e2: 0.13, w_e3: 0.14, w_f: 0.60 }, '數學B':      { w_e1: 0.20, w_e2: 0.20, w_e3: 0.40, w_f: 0.20 }, '歷史':       { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 }, '地理':       { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 }, '公民與社會':   { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 } } } } },
+        g12: { label: '高三', tracks: { natural: { label: '自然組', subjects: { '國文': { w_e1: 0.20, w_e2: 0.20, w_e3: 0.30, w_f: 0.30 }, '英文': { w_e1: 0.13, w_e2: 0.13, w_e3: 0.14, w_f: 0.60 }, '數學甲':     { w_e1: 0.30, w_e2: 0.30, w_e3: 0.40, w_f: 0.00 }, '物理(物質構造)': { w_e1: 0.25, w_e2: 0.25, w_e3: 0.25, w_f: 0.25 }, '化學(有機)':   { w_e1: 0.30, w_e2: 0.30, w_e3: 0.00, w_f: 0.40 }, '生物(生態)':   { w_e1: 0.35, w_e2: 0.35, w_e3: 0.00, w_f: 0.30 } } }, social: { label: '社會組', subjects: { '國文': { w_e1: 0.20, w_e2: 0.20, w_e3: 0.30, w_f: 0.30 }, '英文': { w_e1: 0.13, w_e2: 0.13, w_e3: 0.14, w_f: 0.60 }, '數學乙':     { w_e1: 0.25, w_e2: 0.25, w_e3: 0.50, w_f: 0.00 }, '歷史':       { w_e1: 0.30, w_e2: 0.30, w_e3: 0.00, w_f: 0.40 }, '地理':       { w_e1: 0.25, w_e2: 0.25, w_e3: 0.00, w_f: 0.50 }, '公民與社會':   { w_e1: 0.20, w_e2: 0.20, w_e3: 0.20, w_f: 0.40 } } } } }
     };
 
     // --- DOM ELEMENTS ---
@@ -95,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         customTargetInputContainer: document.getElementById('customTargetInputContainer'),
         customTargetGradeInput: document.getElementById('customTargetGrade'),
         scoreInputsContainer: document.getElementById('score-inputs-container'),
+        scoresInputs: {}, // Will be populated dynamically
         calculateButton: document.getElementById('calculateButton'),
         clearButton: document.getElementById('clearButton'),
         copyResultsButton: document.getElementById('copyResultsButton'),
@@ -103,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
         statusResultDiv: document.getElementById('statusResult'),
         neededResultDiv: document.getElementById('neededResult')
     };
-    elements.scoresInputs = {}; // Will be populated dynamically
 
     // --- LOCALSTORAGE & STATE ---
     const LS_KEYS = { masterScheme: 'gradeCalc_v2_masterScheme', grade: 'gradeCalc_v2_grade', track: 'gradeCalc_v2_track', subject: 'gradeCalc_v2_subject', calcMode: 'gradeCalc_v2_calcMode', scores: 'gradeCalc_v2_scores' };
@@ -112,36 +35,25 @@ document.addEventListener('DOMContentLoaded', () => {
     function getSelectedRadioValue(name) { const radios = document.getElementsByName(name); for (let i = 0; i < radios.length; i++) { if (radios[i].checked) { return radios[i].value; } } return null; }
 
     // --- UI POPULATION & DYNAMIC RENDERING ---
-    function populateGrades() { /* ... same as before ... */ }
-    function populateTracks(gradeKey) { /* ... same as before ... */ }
-    function populateSubjects(gradeKey, trackKey) { /* ... same as before ... */ }
+    function populateGrades() { elements.gradeSelect.innerHTML = '<option value="">請選擇年級</option>'; for (const gradeKey in FENG_HSIN_RULES) { const option = document.createElement('option'); option.value = gradeKey; option.textContent = FENG_HSIN_RULES[gradeKey].label; elements.gradeSelect.appendChild(option); } }
+    function populateTracks(gradeKey) { const tracks = FENG_HSIN_RULES[gradeKey]?.tracks || {}; elements.trackSelect.innerHTML = '<option value="">請選擇組別</option>'; for (const trackKey in tracks) { const option = document.createElement('option'); option.value = trackKey; option.textContent = tracks[trackKey].label; elements.trackSelect.appendChild(option); } elements.trackSelect.disabled = Object.keys(tracks).length === 0; }
+    function populateSubjects(gradeKey, trackKey) { const subjects = FENG_HSIN_RULES[gradeKey]?.tracks[trackKey]?.subjects || {}; elements.subjectSelect.innerHTML = '<option value="">請選擇科目</option>'; for (const subjectName in subjects) { const option = document.createElement('option'); option.value = subjectName; option.textContent = subjectName; elements.subjectSelect.appendChild(option); } elements.subjectSelect.disabled = Object.keys(subjects).length === 0; }
     
     function renderScoreInputs(masterScheme) {
-        elements.scoreInputsContainer.innerHTML = ''; // Clear previous inputs
+        elements.scoreInputsContainer.innerHTML = '';
+        elements.scoresInputs = {}; // ** FIX: Re-initialize the object to ensure it's not undefined **
+        
         const scoresInputDiv = document.createElement('div');
         scoresInputDiv.className = 'scores-input';
-
         const title = document.createElement('h2');
         title.textContent = '輸入各項成績 (0-100)';
         scoresInputDiv.appendChild(title);
 
         let inputsToRender;
         if (masterScheme === 'fenghsin') {
-            inputsToRender = [
-                { id: 's_p1', label: '平時成績' },
-                { id: 's_e1', label: '期一考 (一段)', class: 'exam-score' },
-                { id: 's_e2', label: '期二考 (二段)', class: 'exam-score' },
-                { id: 's_e3', label: '期末考 (三段)', class: 'exam-score' }
-            ];
-        } else { // Generic schemes
-            inputsToRender = [
-                { id: 's_p1', label: '平時成績(一)' },
-                { id: 's_p2', label: '平時成績(二)' },
-                { id: 's_p3', label: '平時成績(三)' },
-                { id: 's_e1', label: '段考(一)', class: 'exam-score' },
-                { id: 's_e2', label: '段考(二)', class: 'exam-score' },
-                { id: 's_e3', label: '段考(三)', class: 'exam-score' }
-            ];
+            inputsToRender = [ { id: 's_p1', label: '平時成績' }, { id: 's_e1', label: '期一考 (一段)', class: 'exam-score' }, { id: 's_e2', label: '期二考 (二段)', class: 'exam-score' }, { id: 's_e3', label: '期末考 (三段)', class: 'exam-score' } ];
+        } else {
+            inputsToRender = [ { id: 's_p1', label: '平時成績(一)' }, { id: 's_p2', label: '平時成績(二)' }, { id: 's_p3', label: '平時成績(三)' }, { id: 's_e1', label: '段考(一)', class: 'exam-score' }, { id: 's_e2', label: '段考(二)', class: 'exam-score' }, { id: 's_e3', label: '段考(三)', class: 'exam-score' } ];
         }
 
         inputsToRender.forEach(item => {
@@ -149,45 +61,28 @@ document.addEventListener('DOMContentLoaded', () => {
             scoreItemDiv.className = 'score-item';
             if (item.class) scoreItemDiv.classList.add(item.class);
             if (item.id === 's_e3') scoreItemDiv.id = 's_e3_item';
-
             const label = document.createElement('label');
             label.htmlFor = item.id;
             label.textContent = item.label;
-
             const input = document.createElement('input');
-            input.type = 'number';
-            input.id = item.id;
-            input.min = 0;
-            input.max = 100;
-            input.placeholder = '0-100';
-
+            input.type = 'number'; input.id = item.id; input.min = 0; input.max = 100; input.placeholder = '0-100';
             const errorSpan = document.createElement('span');
-            errorSpan.className = 'error-message';
-            errorSpan.id = `error_${item.id}`;
-
-            scoreItemDiv.appendChild(label);
-            scoreItemDiv.appendChild(input);
-            scoreItemDiv.appendChild(errorSpan);
+            errorSpan.className = 'error-message'; errorSpan.id = `error_${item.id}`;
+            scoreItemDiv.appendChild(label); scoreItemDiv.appendChild(input); scoreItemDiv.appendChild(errorSpan);
             scoresInputDiv.appendChild(scoreItemDiv);
-
-            // Re-populate elements object and attach listeners
-            elements.scoresInputs[item.id] = input;
-            elements.errorSpans[item.id] = errorSpan;
-            input.addEventListener('input', () => {
-                validateScoreInput(input);
-                saveAllScores();
-            });
+            
+            elements.scoresInputs[item.id] = input; // Now this is safe
+            input.addEventListener('input', () => { validateScoreInput(input); saveAllScores(); });
         });
         
         elements.scoreInputsContainer.appendChild(scoresInputDiv);
-        elements.s_e3_item_div = document.getElementById('s_e3_item'); // Important: re-acquire this element
         loadAllScores();
-        updateCalculationModeUI(); // Update UI for the newly rendered inputs
+        updateCalculationModeUI();
     }
 
     // --- UI STATE MANAGEMENT ---
     function setUIState(masterScheme) {
-        renderScoreInputs(masterScheme); // Render the correct inputs first
+        renderScoreInputs(masterScheme); 
         if (masterScheme === 'fenghsin') {
             elements.fenghsinSelectorsDiv.classList.remove('hidden');
             const subjectSelected = elements.subjectSelect.value !== "";
@@ -223,21 +118,69 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.calculationModeRadios.forEach(radio => { radio.addEventListener('change', (e) => { localStorage.setItem(LS_KEYS.calcMode, e.target.value); updateCalculationModeUI(); }); });
     
     // --- SCORE INPUT VALIDATION ---
-    function validateScoreInput(inputElement) { /* ... same as before ... */ }
-    
+    function validateScoreInput(inputElement) {
+        if (!inputElement) return true;
+        const errorElement = document.getElementById(`error_${inputElement.id}`); // Re-query for safety
+        if (!errorElement) return true;
+        const value = parseFloat(inputElement.value);
+        let errorMessage = "";
+        if (inputElement.value.trim() === "") {
+            inputElement.classList.remove('input-invalid');
+            errorElement.style.display = 'none';
+            return true;
+        }
+        if (isNaN(value) || value < 0 || value > 100) {
+            errorMessage = value < 0 ? "不能小於0" : "分數應介於0-100";
+            inputElement.classList.add('input-invalid');
+            errorElement.textContent = errorMessage;
+            errorElement.style.display = 'block';
+            return false;
+        } else {
+            inputElement.classList.remove('input-invalid');
+            errorElement.style.display = 'none';
+            return true;
+        }
+    }
+
     // --- CALCULATION LOGIC ---
-    function getWeights() { /* ... same as before ... */ }
-    function displaySelectedWeights() { /* ... same as before ... */ }
+    function getWeights() {
+        const masterScheme = getSelectedRadioValue('masterScheme');
+        switch (masterScheme) {
+            case 'generic64': return { label: '通用方式 (60/40)', formative: 0.4, exam: 0.6 };
+            case 'generic73': return { label: '通用方式 (70/30)', formative: 0.3, exam: 0.7 };
+            case 'fenghsin':
+                const grade = elements.gradeSelect.value; const track = elements.trackSelect.value; const subject = elements.subjectSelect.value;
+                if (!grade || !track || !subject) return null;
+                return FENG_HSIN_RULES[grade]?.tracks[track]?.subjects[subject] || null;
+            default: return null;
+        }
+    }
+    function displaySelectedWeights() {
+        const weights = getWeights();
+        if (weights && elements.weightsDisplay) {
+            let text;
+            if (weights.label) {
+                text = `當前模式：${weights.label}`;
+            } else {
+                const w_f_p = (weights.w_f * 100).toFixed(1).replace(/\.0$/, '');
+                const w_e1_p = (weights.w_e1 * 100).toFixed(1).replace(/\.0$/, '');
+                const w_e2_p = (weights.w_e2 * 100).toFixed(1).replace(/\.0$/, '');
+                const w_e3_p = (weights.w_e3 * 100).toFixed(1).replace(/\.0$/, '');
+                text = `當前權重：平時${w_f_p}%, 期一${w_e1_p}%, 期二${w_e2_p}%, 期末${w_e3_p}%`;
+            }
+            elements.weightsDisplay.textContent = text;
+            elements.weightsDisplay.style.display = 'block';
+        } else { if(elements.weightsDisplay) elements.weightsDisplay.style.display = 'none'; }
+    }
     
     function calculateAndDisplay() {
         let allInputsValid = true;
-        Object.values(elements.scoresInputs).forEach(input => {
-            if (input && input.closest('.score-item') && !input.closest('.score-item').classList.contains('hidden')) {
-                if (!validateScoreInput(input)) {
-                    allInputsValid = false;
-                }
+        for (const id in elements.scoresInputs) {
+            const input = elements.scoresInputs[id];
+            if (input && !input.closest('.score-item').classList.contains('hidden')) {
+                if (!validateScoreInput(input)) { allInputsValid = false; }
             }
-        });
+        }
         if (!allInputsValid) { alert("部分成績輸入無效，請修正紅色提示的欄位。"); return; }
         
         const weights = getWeights();
@@ -251,18 +194,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const masterScheme = getSelectedRadioValue('masterScheme');
         const calcMode = getSelectedRadioValue('calculationMode');
-        
         clearResultsAndHide(true);
-        let finalGrade = 0;
-        let knownPartForNeeded = 0;
-        let weightForNeeded = 0;
+        let finalGrade = 0, knownPartForNeeded = 0, weightForNeeded = 0;
+        let summaryText = "";
 
-        // Calculate based on the scheme
         if (masterScheme === 'fenghsin') {
             finalGrade = Math.round((scores.s_p1 * weights.w_f) + (scores.s_e1 * weights.w_e1) + (scores.s_e2 * weights.w_e2) + (scores.s_e3 * weights.w_e3));
             knownPartForNeeded = (scores.s_p1 * weights.w_f) + (scores.s_e1 * weights.w_e1) + (scores.s_e2 * weights.w_e2);
             weightForNeeded = weights.w_e3;
-        } else { // Generic schemes
+        } else {
             const avgFormative = (scores.s_p1 + scores.s_p2 + scores.s_p3) / 3;
             const avgExam = (scores.s_e1 + scores.s_e2 + scores.s_e3) / 3;
             finalGrade = Math.round((avgFormative * weights.formative) + (avgExam * weights.exam));
@@ -271,30 +211,37 @@ document.addEventListener('DOMContentLoaded', () => {
             weightForNeeded = weights.exam / 3;
         }
 
-        // Display results based on calculation mode
         if (calcMode === 'total') {
             elements.totalGradeResultDiv.textContent = `您的學期總成績為：${finalGrade} 分`;
             let statusText = "";
-            if (finalGrade >= 60) { statusText = "狀態：恭喜過關！"; elements.statusResultDiv.className = 'result-item pass';
-            } else if (finalGrade >= 40) { statusText = "狀態：您可能需要補考！"; elements.statusResultDiv.className = 'result-item makeup';
-            } else { statusText = "狀態：您可能會被當！"; elements.statusResultDiv.className = 'result-item fail'; }
+            if (finalGrade >= 60) { statusText = "狀態：恭喜過關！"; elements.statusResultDiv.className = 'result-item pass'; } else if (finalGrade >= 40) { statusText = "狀態：您可能需要補考！"; elements.statusResultDiv.className = 'result-item makeup'; } else { statusText = "狀態：您可能會被當！"; elements.statusResultDiv.className = 'result-item fail'; }
             elements.statusResultDiv.textContent = statusText;
             elements.totalGradeResultDiv.style.display = 'block';
             elements.statusResultDiv.style.display = 'block';
-        } else { // 'needed' mode
+            summaryText = `學期總成績: ${finalGrade}分\n${statusText}`;
+        } else {
              if (weightForNeeded === 0) {
                  elements.neededResultDiv.innerHTML = "此計分方式無期末考權重，無法計算所需分數。";
              } else {
                 const neededForTarget = (targetGrade) => Math.ceil((targetGrade - 0.5 - knownPartForNeeded) / weightForNeeded);
                 const generateText = (score, label) => { if (score > 100) return `${label}：即使期末考考100分，也無法達到目標。`; if (score <= 0) return `${label}：您已達到此目標標準！`; return `${label}，您的期末考至少需要 ${score} 分。`; };
                 const customTarget = parseFloat(elements.customTargetGradeInput.value) || 70;
-                elements.neededResultDiv.innerHTML = `${generateText(neededForTarget(60), "為避免補考 (達60分)")}<br>${generateText(neededForTarget(40), "為避免被當 (達40分)")}<br>${generateText(neededForTarget(customTarget), `為達自訂目標 (${customTarget}分)`)}`;
+                const text60 = generateText(neededForTarget(60), "為避免補考 (達60分)");
+                const text40 = generateText(neededForTarget(40), "為避免被當 (達40分)");
+                const textCustom = generateText(neededForTarget(customTarget), `為達自訂目標 (${customTarget}分)`);
+                elements.neededResultDiv.innerHTML = `${text60}<br>${text40}<br>${textCustom}`;
+                summaryText = `${text60}\n${text40}\n${textCustom}`;
              }
              elements.neededResultDiv.style.display = 'block';
         }
+        
         elements.copyResultsButton.style.display = 'inline-block';
-        // Summary for copy-paste needs to be rebuilt based on this new logic
-        // ... (omitted for brevity, can be added back if needed)
+        // Rebuild full summary for clipboard
+        const checkedMasterRadio = document.querySelector('input[name="masterScheme"]:checked');
+        let fullSummary = `計分方式: ${checkedMasterRadio ? checkedMasterRadio.labels[0].textContent.trim() : ''}\n`;
+        if (masterScheme === 'fenghsin') { fullSummary += `選擇: ${elements.gradeSelect.options[elements.gradeSelect.selectedIndex].text}, ${elements.trackSelect.options[elements.trackSelect.selectedIndex].text}, ${elements.subjectSelect.value}\n`; }
+        fullSummary += `計算結果:\n${summaryText}`;
+        elements.copyResultsButton.setAttribute('data-summary', fullSummary);
     }
 
     // --- CLEAR & SAVE/LOAD ALL ---
@@ -309,8 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const savedMasterScheme = localStorage.getItem(LS_KEYS.masterScheme) || 'generic64';
         document.querySelector(`input[name="masterScheme"][value="${savedMasterScheme}"]`).checked = true;
         
-        renderScoreInputs(savedMasterScheme); // Render inputs before loading other saved states
-
+        setUIState(savedMasterScheme); // This will render inputs first
+        
         if (savedMasterScheme === 'fenghsin') {
             const savedGrade = localStorage.getItem(LS_KEYS.grade);
             if (savedGrade) {
@@ -321,26 +268,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     elements.trackSelect.value = savedTrack;
                     populateSubjects(savedGrade, savedTrack);
                     const savedSubject = localStorage.getItem(LS_KEYS.subject);
-                    if (savedSubject) { elements.subjectSelect.value = savedSubject; }
+                    if (savedSubject) { 
+                        elements.subjectSelect.value = savedSubject; 
+                        displaySelectedWeights();
+                    }
                 }
             }
         }
         const savedCalcMode = localStorage.getItem(LS_KEYS.calcMode) || 'total';
         document.querySelector(`input[name="calculationMode"][value="${savedCalcMode}"]`).checked = true;
         
-        loadAllScores();
-        setUIState(savedMasterScheme);
-        if (savedMasterScheme === 'fenghsin') displaySelectedWeights();
+        loadAllScores(); // Load scores after inputs are rendered
+        updateCalculationModeUI(); // Final UI check
     }
     
+    // Attach event listeners
     elements.calculateButton.addEventListener('click', calculateAndDisplay);
     elements.clearButton.addEventListener('click', clearInputsAndResults);
-    if (elements.copyResultsButton) { elements.copyResultsButton.addEventListener('click', () => { /* ... copy logic ... */ }); }
+    if (elements.copyResultsButton) { elements.copyResultsButton.addEventListener('click', () => { const summaryToCopy = elements.copyResultsButton.getAttribute('data-summary'); if (summaryToCopy && navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(summaryToCopy).then(() => { elements.copyResultsButton.textContent = '已複製！'; setTimeout(() => { elements.copyResultsButton.textContent = '複製結果摘要'; }, 2000); }).catch(err => { console.error('複製結果時發生錯誤: ', err); }); } }); }
 
-    // Re-populate functions to be defined before they are called in initialize
+    // Re-define populate functions before initialize call to avoid any potential hoisting issues in strict environments
     function populateGrades() { elements.gradeSelect.innerHTML = '<option value="">請選擇年級</option>'; for (const gradeKey in FENG_HSIN_RULES) { const option = document.createElement('option'); option.value = gradeKey; option.textContent = FENG_HSIN_RULES[gradeKey].label; elements.gradeSelect.appendChild(option); } }
     function populateTracks(gradeKey) { const tracks = FENG_HSIN_RULES[gradeKey]?.tracks || {}; elements.trackSelect.innerHTML = '<option value="">請選擇組別</option>'; for (const trackKey in tracks) { const option = document.createElement('option'); option.value = trackKey; option.textContent = tracks[trackKey].label; elements.trackSelect.appendChild(option); } elements.trackSelect.disabled = Object.keys(tracks).length === 0; }
     function populateSubjects(gradeKey, trackKey) { const subjects = FENG_HSIN_RULES[gradeKey]?.tracks[trackKey]?.subjects || {}; elements.subjectSelect.innerHTML = '<option value="">請選擇科目</option>'; for (const subjectName in subjects) { const option = document.createElement('option'); option.value = subjectName; option.textContent = subjectName; elements.subjectSelect.appendChild(option); } elements.subjectSelect.disabled = Object.keys(subjects).length === 0; }
-    
+
     initialize();
 });

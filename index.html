@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>學分狗成績計算機 (v3.0)</title>
+    <title>學分狗成績計算機 (v3.0.1)</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -85,12 +85,28 @@
         </div>
     </div> 
 
+    <div class="info-container">
+        <details class="info-details">
+            <summary class="info-summary">使用教學</summary>
+            <div class="info-content">
+                <p><strong>第一步：選擇計分體系</strong><br>首先，請在頁面最上方的選項中，選擇您要使用的計分方式：「通用方式」或「鳳新高中專用」。</p>
+                <p><strong>第二步：選擇科目 (僅限鳳新模式)</strong><br>若選擇「鳳新高中專用」，請依序選擇「年級」、「組別」和「科目」。部分科目會需要您輸入班級以便套用更精確的規則。</p>
+                <p><strong>第三步：選擇計算模式與輸入成績</strong><br>在計分規則確定後，您可以選擇要「計算學期總成績」或「計算期末考所需分數」。接著，請在下方對應的欄位中輸入您的成績。</p>
+                <p><strong>第四步：查看結果</strong><br>點擊「計算」按鈕後，結果將會顯示在下方。本工具會自動儲存您的所有選擇與輸入的成績，下次打開也會保留紀錄。</p>
+            </div>
+        </details>
+    </div>
+
     <footer>
-        <p>版本 3.0.0 (2025-06-22)</p>
-        <p>本工具 由Jeter Du開發設計</p>
-        <p>由Randy Chxng & Hardy Tsai 功能發想、測試</p>
-        <p>本工具誕生於2025/01/09</p>
-        <p>原始製作想法來自 <a href="https://score.dabo.xyz/" target="_blank" rel="noopener noreferrer">https://score.dabo.xyz/</a></p>
+        <p class="disclaimer">
+            <strong>免責聲明：</strong> 本計算機所有計算結果僅供參考，計分規則乃基於特定版本之公告文件，可能與學校最新規定有所出入。最終成績認定概以學校官方成績單與校方公告為準。開發者不對因使用本工具所造成的任何結果承擔責任。
+        </p>
+        <p class="credits">
+            版本 3.0.1 (2025-06-25) <span class="separator">|</span> 本工具由 Jeter Du 開發設計 <span class="separator">|</span> 由 Randy Chxng & Hardy Tsai 功能發想、測試
+        </p>
+        <p class="credits">
+            原始製作想法來自 <a href="https://score.dabo.xyz/" target="_blank" rel="noopener noreferrer">https://score.dabo.xyz/</a>
+        </p>
     </footer>
 
     <script src="script.js"></script>

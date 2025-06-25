@@ -70,30 +70,10 @@ body {
     padding: 20px; border-radius: 12px; 
     box-shadow: 0 4px 12px var(--card-shadow);
     width: 100%; max-width: 650px; 
-    margin: 20px 20px 25px 20px; 
+    margin: 20px 20px 0 20px; 
     box-sizing: border-box;
     transition: background-color 0.3s ease, box-shadow 0.3s ease; 
 }
-
-/* --- Header & Utility Button Styles --- */
-.header-utils { text-align: right; margin-bottom: -20px; position: relative; z-index: 10; }
-.utility-btn {
-    background-color: var(--button-secondary-bg);
-    color: var(--text-secondary);
-    border: none;
-    border-radius: 50%;
-    width: 32px; height: 32px;
-    font-size: 16px;
-    line-height: 1;
-    cursor: pointer;
-    margin: 0; padding: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s ease;
-}
-.utility-btn:hover { background-color: var(--button-secondary-hover-bg); }
-
 h1 { font-size: 28px; font-weight: 600; text-align: center; color: var(--text-primary); margin-bottom: 25px; }
 h2, h3, legend { color: var(--text-secondary); margin-top: 20px; margin-bottom: 10px; display: flex; align-items: center; }
 h2 { font-size: 20px; font-weight: 600; color: var(--text-primary); }
@@ -112,8 +92,6 @@ fieldset, .selection-group { border: none; border-radius: 10px; padding: 0; marg
 .custom-select { padding-right: 30px; background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'><path fill='none' stroke='var(--select-arrow-color, %238E8E93)' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m1 1 4 4 4-4'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; background-size: 10px 6px; }
 .custom-select:disabled, .custom-input:disabled { opacity: 0.5; cursor: not-allowed; background-color: var(--input-bg); }
 .custom-select:focus, .custom-input:focus, input[type="number"]:focus { border-color: var(--accent-blue); outline: none; box-shadow: 0 0 0 2px var(--input-focus-shadow); }
-
-/* --- Score Input & Form Styles --- */
 input[type="number"] { padding: 10px 12px; border: 1px solid var(--input-border); border-radius: 8px; width: 100px; box-sizing: border-box; font-size: 16px; background-color: var(--input-bg); color: var(--text-primary); text-align: right; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
 input[type="number"].input-invalid { border-color: var(--status-fail); box-shadow: 0 0 0 2px var(--status-fail-shadow); }
 .error-message { font-size: 13px; color: var(--status-fail); margin-top: 4px; flex-basis: 100%; margin-left: calc(170px + 10px); display: none; transition: color 0.3s ease; }
@@ -144,61 +122,37 @@ button:active { opacity: 0.7; }
 #statusResult.fail { color: var(--status-fail); font-weight: 600;} 
 #totalGradeResult, #statusResult, #neededResult, #copyResultsButton, #selected-weights-display { display: none; }
 
-/* --- Modal (Help Popup) Styles --- */
-.modal-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 1;
-    transition: opacity 0.3s ease;
-}
-.modal-overlay.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-.modal-content {
-    background: var(--content-background);
-    padding: 25px;
-    border-radius: 14px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    width: 90%;
-    max-width: 500px;
-    position: relative;
-    transform: scale(1);
-    transition: transform 0.3s ease;
-}
-.modal-overlay.hidden .modal-content {
-    transform: scale(0.9);
-}
-.modal-close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: var(--button-secondary-bg);
-    color: var(--text-secondary);
-    border: none;
-    border-radius: 50%;
-    width: 28px; height: 28px;
-    font-size: 20px;
-    line-height: 28px;
-    text-align: center;
-    padding: 0; margin: 0;
-    cursor: pointer;
-    min-width: auto;
-}
-.modal-content h2 { margin-top: 0; }
-.info-content p { font-size: 15px; line-height: 1.6; color: var(--text-secondary); margin: 0 0 12px 0; transition: color 0.3s ease; }
-.info-content p:last-child { margin-bottom: 0; }
+/* --- Info & Footer Styles --- */
+.info-container { max-width: 650px; width: 100%; box-sizing: border-box; padding: 0 20px; margin: 25px auto 0 auto; }
+.info-details { background-color: var(--content-background); border-radius: 10px; margin-bottom: 15px; box-shadow: 0 1px 1px var(--grouped-item-shadow); transition: background-color 0.3s ease; }
+.info-summary { padding: 15px; font-weight: 600; color: var(--text-primary); cursor: pointer; outline: none; list-style: none; transition: color 0.3s ease; }
+.info-summary::-webkit-details-marker { display: none; }
+.info-summary::after { content: '▼'; float: right; font-size: 0.8em; color: var(--text-secondary); transition: transform 0.2s ease-in-out; }
+.info-details[open] > .info-summary::after { transform: rotate(180deg); }
+.info-content { padding: 0 15px 15px 15px; border-top: 1px solid var(--separator-color); transition: border-color 0.3s ease; }
+.info-content p { font-size: 14px; line-height: 1.6; color: var(--text-secondary); margin: 10px 0 0 0; transition: color 0.3s ease; }
+.info-content p:first-child { margin-top: 10px; }
 
-/* --- Footer Styles --- */
 footer { text-align: center; margin-top: 30px; padding: 20px 15px; border-top: 1px solid var(--separator-opaque); width: 100%; box-sizing: border-box; background-color: var(--footer-bg); transition: background-color 0.3s ease, border-color 0.3s ease; }
-footer .disclaimer { font-size: 12px; color: var(--text-tertiary); margin-bottom: 15px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.5; }
-footer .credits { font-size: 13px; color: var(--text-tertiary); margin: 4px 0; line-height: 1.4; transition: color 0.3s ease; }
-footer .separator { margin: 0 8px; color: var(--separator-color); }
+footer .disclaimer {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-bottom: 15px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+}
+footer .credits {
+    font-size: 13px;  
+    color: var(--text-tertiary); 
+    margin: 4px 0;     
+    line-height: 1.4;  
+    transition: color 0.3s ease;
+}
+footer .separator {
+    margin: 0 8px;
+    color: var(--separator-color);
+}
 footer a { color: var(--link-color); text-decoration: none; transition: color 0.3s ease; }
 footer a:hover { text-decoration: underline; }

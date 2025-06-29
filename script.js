@@ -55,9 +55,53 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCalculationModeUI();
     }
 
-    function setUIState(masterScheme) { /* ... same as previous ... */ }
-    function updateCalculationModeUI() { /* ... same as previous ... */ }
-    function handleSubjectChange() { /* ... same as previous ... */ }
+    function setUIState(masterScheme) {
+        const fenghsinSelected = masterScheme === 'fenghsin';
+        elements.fenghsinSelectorsDiv.classList.toggle('hidden', !fenghsinSelected);
+        if (!fenghsinSelected) {
+            renderScoreInputs(masterScheme, getWeights());
+            elements.calculatorBody.classList.remove('hidden');
+            elements.classInputContainer.classList.add('hidden');
+        } else {
+            handleSubjectChange();
+        }
+        clearResultsAndHide();
+    }
+    
+    function updateCalculationModeUI() {
+        const calcMode = getSelectedRadioValue('calculationMode');
+        const customTargetContainer = elements.customTargetInputContainer;
+        const finalExamItem = document.getElementById('s_e3_item');
+        if (!customTargetContainer) return;
+        if (calcMode === 'needed') {
+            customTargetContainer.style.display = 'flex';
+            if (finalExamItem) finalExamItem.style.display = 'none';
+        } else {
+            customTargetContainer.style.display = 'none';
+            if (finalExamItem) finalExamItem.style.display = 'flex';
+        }
+    }
+
+    function handleSubjectChange() {
+        const subject = elements.subjectSelect.value;
+        localStorage.setItem(LS_KEYS.subject, subject);
+        const grade = elements.gradeSelect.value;
+        const track = elements.trackSelect.value;
+        if (!grade || !track) return;
+        const subjectRules = FENG_HSIN_RULES[grade]?.tracks[track]?.subjects[subject];
+        const needsClassInput = subjectRules && subjectRules.exceptions;
+        elements.classInputContainer.classList.toggle('hidden', !needsClassInput);
+        const canProceed = subject && (!needsClassInput || (needsClassInput && elements.classInput.value.trim() !== ''));
+        if (canProceed) {
+            const weights = getWeights();
+            renderScoreInputs('fenghsin', weights);
+            elements.calculatorBody.classList.remove('hidden');
+            displaySelectedWeights();
+        } else {
+            elements.calculatorBody.classList.add('hidden');
+            elements.weightsDisplay.style.display = 'none';
+        }
+    }
     
     function getWeights() {
         const masterScheme = getSelectedRadioValue('masterScheme');
@@ -81,53 +125,60 @@ document.addEventListener('DOMContentLoaded', () => {
         return null;
     }
     
-    function displaySelectedWeights() { const weights = getWeights(); if (weights && elements.weightsDisplay) { let text; if (weights.label) { text = `當前模式：${weights.label}`; } else { text = `權重：平時${formatPercent(weights.w_f)} | 期一${formatPercent(weights.w_e1)} | 期二${formatPercent(weights.w_e2)} | 期末${formatPercent(weights.w_e3)}`; } elements.weightsDisplay.textContent = text; elements.weightsDisplay.style.display = 'block'; } else { if(elements.weightsDisplay) elements.weightsDisplay.style.display = 'none'; } }
+    function displaySelectedWeights() { const weights = getWeights(); if (weights && elements.weightsDisplay) { let text; if (weights.label) { text = `當前模式：${weights.label}`; } else { text = `權重：平時${formatPercent(weights.w_f)} | 期一${formatPercent(weights.w_e1)} | 期二${formatPercent(weights.w_e2)} | 期末${formatPercent(weights.w_e3)}`; if(weights.note) { text += ` (${weights.note})` } } elements.weightsDisplay.textContent = text; elements.weightsDisplay.style.display = 'block'; } else { if(elements.weightsDisplay) elements.weightsDisplay.style.display = 'none'; } }
     
-    // --- ** NEW ** Calculation Process HTML Generator ---
     function generateProcessHtml(data) {
         let html = '';
-        if (data.mode === 'total') {
-            if (data.scheme === 'fenghsin') {
-                html += `<div class="process-step"><strong>公式:</strong> (平時*${formatPercent(data.weights.w_f)}) + (期一*${formatPercent(data.weights.w_e1)}) + (期二*${formatPercent(data.weights.w_e2)}) + (期末*${formatPercent(data.weights.w_e3)})</div>`;
-                html += `<div class="process-step"><strong>代入:</strong> (${data.scores.s_p1}*${formatPercent(data.weights.w_f)}) + (${data.scores.s_e1}*${formatPercent(data.weights.w_e1)}) + (${data.scores.s_e2}*${formatPercent(data.weights.w_e2)}) + (${data.scores.s_e3}*${formatPercent(data.weights.w_e3)})</div>`;
+        const { mode, scheme, weights, scores, finalGrade } = data;
+        html += `<div class="process-step"><strong>公式:</strong> ${scheme === 'fenghsin' ? '各項成績 * 對應權重' : '(平時平均 * 權重) + (段考平均 * 權重)'}</div>`;
+        
+        if (mode === 'total') {
+            if (scheme === 'fenghsin') {
+                let formula = [];
+                if(weights.w_f > 0) formula.push(`(平時 ${scores.s_p1} * ${formatPercent(weights.w_f)})`);
+                if(weights.w_e1 > 0) formula.push(`(期一 ${scores.s_e1} * ${formatPercent(weights.w_e1)})`);
+                if(weights.w_e2 > 0) formula.push(`(期二 ${scores.s_e2} * ${formatPercent(weights.w_e2)})`);
+                if(weights.w_e3 > 0) formula.push(`(期末 ${scores.s_e3} * ${formatPercent(weights.w_e3)})`);
+                html += `<div class="process-step"><strong>代入:</strong><br>${formula.join(' +<br>')}</div>`;
             } else { // Generic
-                html += `<div class="process-step"><strong>平時平均:</strong> (${data.scores.s_p1} + ${data.scores.s_p2} + ${data.scores.s_p3}) / 3 = ${data.avgFormative.toFixed(2)}</div>`;
-                html += `<div class="process-step"><strong>段考平均:</strong> (${data.scores.s_e1} + ${data.scores.s_e2} + ${data.scores.s_e3}) / 3 = ${data.avgExam.toFixed(2)}</div>`;
-                html += `<div class="process-step"><strong>總成績:</strong> (${data.avgFormative.toFixed(2)} * ${formatPercent(data.weights.formative)}) + (${data.avgExam.toFixed(2)} * ${formatPercent(data.weights.exam)})</div>`;
+                html += `<div class="process-step"><strong>平時平均:</strong> (${scores.s_p1} + ${scores.s_p2} + ${scores.s_p3}) / 3 = ${data.avgFormative.toFixed(2)}</div>`;
+                html += `<div class="process-step"><strong>段考平均:</strong> (${scores.s_e1} + ${scores.s_e2} + ${scores.s_e3}) / 3 = ${data.avgExam.toFixed(2)}</div>`;
+                html += `<div class="process-step"><strong>總成績:</strong> (${data.avgFormative.toFixed(2)} * ${formatPercent(weights.formative)}) + (${data.avgExam.toFixed(2)} * ${formatPercent(weights.exam)})</div>`;
             }
-            html += `<div class="process-step"><strong>計算結果:</strong> ${data.unroundedTotal.toFixed(2)}</div>`;
-            html += `<div class="process-step"><strong>四捨五入後:</strong> ${data.finalGrade}</div>`;
+            html += `<div class="process-step"><strong>計算結果:</strong> ${data.unroundedTotal.toFixed(3)}</div>`;
+            html += `<div class="process-step"><strong>四捨五入後:</strong> <strong>${finalGrade}</strong></div>`;
         } else { // Needed mode
-            html += `<div class="process-step"><strong>已知分數加權總和 (Known Part):</strong> ${data.knownPart.toFixed(2)}</div>`;
+            html += `<div class="process-step"><strong>已知分數加權總和 (Known Part):</strong> ${data.knownPart.toFixed(3)}</div>`;
             html += `<div class="process-step"><strong>期末考權重:</strong> ${formatPercent(data.weightNeeded)}</div>`;
-            html += `<div class="process-step"><strong>目標 ${data.target}分所需期末考分數:</strong><br>Math.ceil( ( ${data.target} - 0.5 - ${data.knownPart.toFixed(2)} ) / ${data.weightNeeded.toFixed(4)} ) = ${data.neededScore}</div>`;
+            data.targets.forEach(item => {
+                html += `<div class="process-step"><strong>目標 ${item.target}分 (${item.label}) 所需分數:</strong><br>Math.ceil( ( ${item.target} - 0.5 - ${data.knownPart.toFixed(3)} ) / ${data.weightNeeded.toFixed(4)} ) = <strong>${item.neededScore}</strong></div>`;
+            });
         }
         return html;
     }
 
     function calculateAndDisplay() {
-        let allInputsValid = true;
-        for (const id in elements.scoresInputs) { if (elements.scoresInputs[id] && !validateScoreInput(elements.scoresInputs[id])) { allInputsValid = false; } }
+        let allInputsValid = true; for (const id in elements.scoresInputs) { if (elements.scoresInputs[id] && !validateScoreInput(elements.scoresInputs[id])) { allInputsValid = false; } }
         if (!allInputsValid) { alert("部分成績輸入無效，請修正紅色提示的欄位。"); return; }
         const weights = getWeights(); if (!weights) { alert("請先完成所有計分方式的選擇！"); return; }
         displaySelectedWeights();
-        const scores = {};
-        for (const id in elements.scoresInputs) { scores[id] = parseFloat(elements.scoresInputs[id]?.value) || 0; }
-        const masterScheme = getSelectedRadioValue('masterScheme');
-        const calcMode = getSelectedRadioValue('calculationMode');
+        const scores = {}; for (const id in elements.scoresInputs) { scores[id] = parseFloat(elements.scoresInputs[id]?.value) || 0; }
+        const masterScheme = getSelectedRadioValue('masterScheme'); const calcMode = getSelectedRadioValue('calculationMode');
         clearResultsAndHide(true);
         let finalGrade = 0, summaryText = "", processData = {};
 
         if (masterScheme === 'fenghsin') {
             const unroundedTotal = (scores.s_p1 * weights.w_f) + (scores.s_e1 * weights.w_e1) + (scores.s_e2 * weights.w_e2) + (scores.s_e3 * weights.w_e3);
             finalGrade = Math.round(unroundedTotal);
-            processData = { mode: 'total', scheme: 'fenghsin', weights, scores, unroundedTotal, finalGrade };
-        } else { // Generic schemes
+            const knownPartForNeeded = (scores.s_p1 * weights.w_f) + (scores.s_e1 * weights.w_e1) + (scores.s_e2 * weights.w_e2);
+            processData = { mode: calcMode, scheme: 'fenghsin', weights, scores, unroundedTotal, finalGrade, knownPart: knownPartForNeeded, weightNeeded: weights.w_e3 };
+        } else { // Generic
             const avgFormative = (scores.s_p1 + scores.s_p2 + scores.s_p3) / 3;
             const avgExam = (scores.s_e1 + scores.s_e2 + scores.s_e3) / 3;
             const unroundedTotal = (avgFormative * weights.formative) + (avgExam * weights.exam);
             finalGrade = Math.round(unroundedTotal);
-            processData = { mode: 'total', scheme: 'generic', weights, scores, avgFormative, avgExam, unroundedTotal, finalGrade };
+            const knownPartForNeeded = (avgFormative * weights.formative) + ((scores.s_e1 + scores.s_e2) / 3 * weights.exam);
+            processData = { mode: calcMode, scheme: 'generic', weights, scores, avgFormative, avgExam, unroundedTotal, finalGrade, knownPart: knownPartForNeeded, weightNeeded: weights.exam / 3 };
         }
 
         if (calcMode === 'total') {
@@ -135,56 +186,41 @@ document.addEventListener('DOMContentLoaded', () => {
             let statusText = "";
             if (finalGrade >= 60) { statusText = "狀態：恭喜過關！"; elements.statusResultDiv.className = 'result-item pass'; } else if (finalGrade >= 40) { statusText = "狀態：您可能需要補考！"; elements.statusResultDiv.className = 'result-item makeup'; } else { statusText = "狀態：您可能會被當！"; elements.statusResultDiv.className = 'result-item fail'; }
             elements.statusResultDiv.textContent = statusText;
-            elements.totalGradeResultDiv.style.display = 'block';
-            elements.statusResultDiv.style.display = 'block';
+            elements.totalGradeResultDiv.style.display = 'block'; elements.statusResultDiv.style.display = 'block';
             summaryText = `學期總成績: ${finalGrade}分\n${statusText}`;
         } else { // 'needed' mode
-            let knownPart = 0, weightNeeded = 0;
-             if (masterScheme === 'fenghsin') {
-                knownPart = (scores.s_p1 * weights.w_f) + (scores.s_e1 * weights.w_e1) + (scores.s_e2 * weights.w_e2);
-                weightNeeded = weights.w_e3;
-            } else {
-                const avgFormative = (scores.s_p1 + scores.s_p2 + scores.s_p3) / 3;
-                knownPart = (avgFormative * weights.formative) + ((scores.s_e1 + scores.s_e2) / 3 * weights.exam);
-                weightNeeded = weights.exam / 3;
-            }
-
-             if (weightNeeded === 0) {
+             if (processData.weightNeeded === 0) {
                  elements.neededResultDiv.innerHTML = "此計分方式無期末考權重，無法計算所需分數。";
-                 processData = null; // No process to show
+                 processData = null; 
              } else {
-                const neededForTarget = (targetGrade) => Math.ceil((targetGrade - 0.5 - knownPart) / weightNeeded);
+                const neededForTarget = (targetGrade) => Math.ceil((targetGrade - 0.5 - processData.knownPart) / processData.weightNeeded);
                 const generateText = (score, label) => { if (score > 100) return `${label}：即使考100分也無法達到。`; if (score <= 0) return `${label}：您已達到此目標！`; return `${label}，期末考至少需 ${score} 分。`; };
                 const customTarget = parseFloat(elements.customTargetGradeInput.value) || 70;
-                const text60 = generateText(neededForTarget(60), "為避免補考(達60分)"); const text40 = generateText(neededForTarget(40), "為避免被當(達40分)"); const textCustom = generateText(neededForTarget(customTarget), `為達自訂目標(${customTarget}分)`);
-                elements.neededResultDiv.innerHTML = `${text60}<br>${text40}<br>${textCustom}`;
-                summaryText = `${text60}\n${text40}\n${textCustom}`;
-                processData = { mode: 'needed', knownPart, weightNeeded, target: customTarget, neededScore: neededForTarget(customTarget) }; // Example process data for custom target
+                const targets = [ { target: 60, label: "為避免補考(達60分)"}, { target: 40, label: "為避免被當(達40分)"}, { target: customTarget, label: `為達自訂目標(${customTarget}分)`}];
+                let resultHTML = []; let resultText = [];
+                targets.forEach(t => { t.neededScore = neededForTarget(t.target); const text = generateText(t.neededScore, t.label); resultHTML.push(text); resultText.push(text); });
+                elements.neededResultDiv.innerHTML = resultHTML.join('<br>');
+                summaryText = resultText.join('\n');
+                processData.targets = targets;
              }
              elements.neededResultDiv.style.display = 'block';
         }
         
-        // --- Generate and Display Process ---
-        if (processData && elements.calculationProcessContent) {
-            elements.calculationProcessContent.innerHTML = generateProcessHtml(processData);
-            elements.calculationProcessContainer.style.display = 'block';
-        }
-
+        if (processData) { elements.calculationProcessContent.innerHTML = generateProcessHtml(processData); elements.calculationProcessContainer.style.display = 'block'; }
+        
         elements.copyResultsButton.style.display = 'inline-block';
         const checkedMasterRadio = document.querySelector('input[name="masterScheme"]:checked');
         let fullSummary = `計分方式: ${checkedMasterRadio ? checkedMasterRadio.labels[0].textContent.trim() : ''}\n`;
-        if (masterScheme === 'fenghsin') { fullSummary += `選擇: ${elements.gradeSelect.options[elements.gradeSelect.selectedIndex].text}, ${elements.trackSelect.options[elements.trackSelect.selectedIndex].text}, ${elements.subjectSelect.value}\n`; }
+        if (getSelectedRadioValue('masterScheme') === 'fenghsin') { fullSummary += `選擇: ${elements.gradeSelect.options[elements.gradeSelect.selectedIndex].text}, ${elements.trackSelect.options[elements.trackSelect.selectedIndex].text}, ${elements.subjectSelect.value}\n`; }
         fullSummary += `\n計算結果:\n${summaryText}`;
         elements.copyResultsButton.setAttribute('data-summary', fullSummary);
     }
     
-    // --- CLEAR & SAVE/LOAD ALL ---
     function saveAllScores() { const scores = {}; for(const id in elements.scoresInputs) { if(elements.scoresInputs[id]) scores[id] = elements.scoresInputs[id].value; } localStorage.setItem(LS_KEYS.scores, JSON.stringify(scores)); }
     function loadAllScores() { const savedScores = localStorage.getItem(LS_KEYS.scores); if (savedScores) { try { const scores = JSON.parse(savedScores); for(const id in scores) { if (elements.scoresInputs[id] && scores[id] !== undefined) { elements.scoresInputs[id].value = scores[id]; validateScoreInput(elements.scoresInputs[id]); } } } catch (e) { console.error("解析已儲存的分數時出錯:", e); } } }
     function clearInputsAndResults() { for(const id in elements.scoresInputs) { if (elements.scoresInputs[id]) { elements.scoresInputs[id].value = ''; validateScoreInput(elements.scoresInputs[id]); } } if (elements.customTargetGradeInput) elements.customTargetGradeInput.value = '70'; localStorage.removeItem(LS_KEYS.scores); clearResultsAndHide(); }
     function clearResultsAndHide(keepWeightDisplay = false) { elements.totalGradeResultDiv.style.display = 'none'; elements.statusResultDiv.style.display = 'none'; elements.neededResultDiv.style.display = 'none'; elements.copyResultsButton.style.display = 'none'; if (!keepWeightDisplay && elements.weightsDisplay) { elements.weightsDisplay.style.display = 'none'; } if (elements.calculationProcessContainer) { elements.calculationProcessContainer.style.display = 'none'; elements.calculationProcessContainer.open = false; } }
     
-    // --- INITIALIZATION ---
     function initialize() {
         populateGrades();
         const savedMasterScheme = localStorage.getItem(LS_KEYS.masterScheme) || 'generic64';
@@ -211,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const savedCalcMode = localStorage.getItem(LS_KEYS.calcMode) || 'total';
         document.querySelector(`input[name="calculationMode"][value="${savedCalcMode}"]`).checked = true;
-        loadAllScores();
+        // loadAllScores is now called within renderScoreInputs
         updateCalculationModeUI();
     }
     

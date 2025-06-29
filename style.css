@@ -92,12 +92,9 @@ fieldset, .selection-group { border: none; border-radius: 10px; padding: 0; marg
 .custom-select { padding-right: 30px; background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'><path fill='none' stroke='var(--select-arrow-color, %238E8E93)' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m1 1 4 4 4-4'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; background-size: 10px 6px; }
 .custom-select:disabled, .custom-input:disabled { opacity: 0.5; cursor: not-allowed; background-color: var(--input-bg); }
 .custom-select:focus, .custom-input:focus, input[type="number"]:focus { border-color: var(--accent-blue); outline: none; box-shadow: 0 0 0 2px var(--input-focus-shadow); }
-input[type="number"] { padding: 10px 12px; border: 1px solid var(--input-border); border-radius: 8px; width: 100px; box-sizing: border-box; font-size: 16px; background-color: var(--input-bg); color: var(--text-primary); text-align: right; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
-input[type="number"].input-invalid { border-color: var(--status-fail); box-shadow: 0 0 0 2px var(--status-fail-shadow); }
-.error-message { font-size: 13px; color: var(--status-fail); margin-top: 4px; flex-basis: 100%; margin-left: calc(170px + 10px); display: none; transition: color 0.3s ease; }
-input[type="radio"] { appearance: none; -webkit-appearance: none; width: 22px; height: 22px; border: 1.5px solid var(--separator-color); border-radius: 50%; position: relative; outline: none; margin-right: 12px; vertical-align: middle; flex-shrink: 0; cursor: pointer; background-color: var(--content-background); transition: background-color 0.3s ease, border-color 0.3s ease; }
-input[type="radio"]:checked { border-color: var(--accent-blue); background-color: var(--accent-blue); }
-input[type="radio"]:checked::after { content: ''; display: block; width: 10px; height: 10px; background: var(--content-background); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: background-color 0.3s ease; }
+.custom-input { text-align: right; }
+
+/* Calculation Mode & Score Input Styles */
 .options-group label, .master-scheme-group label, .score-item label { margin-left: 0; cursor: pointer; font-size: 16px; color: var(--text-primary); transition: color 0.3s ease; }
 .options-group div > label, .master-scheme-group div > label { flex-grow: 1; }
 .score-item { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 15px; }
@@ -105,6 +102,12 @@ input[type="radio"]:checked::after { content: ''; display: block; width: 10px; h
 .scores-input h2 { margin-left: 15px; margin-bottom: 8px; margin-top: 15px; }
 .score-item:not(:last-child) { border-bottom: 1px solid var(--separator-color); transition: border-color 0.3s ease; }
 .score-item label { flex-basis: 170px; flex-shrink: 0; }
+input[type="number"] { padding: 10px 12px; border: 1px solid var(--input-border); border-radius: 8px; width: 100px; box-sizing: border-box; font-size: 16px; background-color: var(--input-bg); color: var(--text-primary); text-align: right; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+input[type="number"].input-invalid { border-color: var(--status-fail); box-shadow: 0 0 0 2px var(--status-fail-shadow); }
+.error-message { font-size: 13px; color: var(--status-fail); margin-top: 4px; flex-basis: 100%; margin-left: calc(170px + 10px); display: none; transition: color 0.3s ease; }
+input[type="radio"] { appearance: none; -webkit-appearance: none; width: 22px; height: 22px; border: 1.5px solid var(--separator-color); border-radius: 50%; position: relative; outline: none; margin-right: 12px; vertical-align: middle; flex-shrink: 0; cursor: pointer; background-color: var(--content-background); transition: background-color 0.3s ease, border-color 0.3s ease; }
+input[type="radio"]:checked { border-color: var(--accent-blue); background-color: var(--accent-blue); }
+input[type="radio"]:checked::after { content: ''; display: block; width: 10px; height: 10px; background: var(--content-background); border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: background-color 0.3s ease; }
 
 /* --- Buttons & Results --- */
 button { display: inline-block; border: none; border-radius: 8px; cursor: pointer; font-size: 17px; padding: 12px 20px; margin-top: 25px; margin-right: 10px; transition: background-color 0.2s ease, opacity 0.2s ease, color 0.2s ease; text-align: center; min-width: 100px; }
@@ -116,11 +119,11 @@ button:active { opacity: 0.7; }
 .results-output { margin-top: 25px; padding: 15px; background-color: var(--results-bg); border: none; border-radius: 8px; transition: background-color 0.3s ease; }
 .results-output h3 { margin-left: 0; padding-left: 0; }
 .result-item { margin-bottom: 12px; font-size: 1.05em; line-height: 1.5; padding: 8px 0; color: var(--text-primary); transition: color 0.3s ease; }
-#selected-weights-display.small-text { font-size: 14px; color: var(--text-secondary); text-align: center; margin-bottom: -10px; margin-top: -10px; padding: 0; }
+#selected-weights-display.small-text { font-size: 14px; color: var(--text-secondary); text-align: center; margin-bottom: -10px; margin-top: 0px; padding: 0; }
 #statusResult.pass { color: var(--status-pass); font-weight: 600;} 
 #statusResult.makeup { color: var(--status-makeup); font-weight: 600;} 
 #statusResult.fail { color: var(--status-fail); font-weight: 600;} 
-#totalGradeResult, #statusResult, #neededResult, #copyResultsButton, #selected-weights-display { display: none; }
+#totalGradeResult, #statusResult, #neededResult, #copyResultsButton, #selected-weights-display, #calculation-process-container { display: none; }
 
 /* --- Info & Footer Styles --- */
 .info-container { max-width: 650px; width: 100%; box-sizing: border-box; padding: 0 20px; margin: 25px auto 0 auto; }
@@ -132,27 +135,32 @@ button:active { opacity: 0.7; }
 .info-content { padding: 0 15px 15px 15px; border-top: 1px solid var(--separator-color); transition: border-color 0.3s ease; }
 .info-content p { font-size: 14px; line-height: 1.6; color: var(--text-secondary); margin: 10px 0 0 0; transition: color 0.3s ease; }
 .info-content p:first-child { margin-top: 10px; }
+.info-content strong { color: var(--text-primary); }
 
-footer { text-align: center; margin-top: 30px; padding: 20px 15px; border-top: 1px solid var(--separator-opaque); width: 100%; box-sizing: border-box; background-color: var(--footer-bg); transition: background-color 0.3s ease, border-color 0.3s ease; }
-footer .disclaimer {
-    font-size: 12px;
-    color: var(--text-tertiary);
-    margin-bottom: 15px;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.5;
+/* --- Styles for the Calculation Process Display --- */
+#calculation-process-content {
+    font-family: "SF Mono", "Menlo", "Monaco", "Consolas", "Courier New", monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text-secondary);
 }
-footer .credits {
-    font-size: 13px;  
-    color: var(--text-tertiary); 
-    margin: 4px 0;     
-    line-height: 1.4;  
-    transition: color 0.3s ease;
+#calculation-process-content div {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px dotted var(--separator-color);
 }
-footer .separator {
-    margin: 0 8px;
-    color: var(--separator-color);
+#calculation-process-content div:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
 }
+#calculation-process-content strong {
+    color: var(--text-primary);
+}
+
+/* --- Footer Styles --- */
+footer { text-align: center; margin-top: 15px; padding: 20px 15px; border-top: 1px solid var(--separator-opaque); width: 100%; box-sizing: border-box; background-color: var(--footer-bg); transition: background-color 0.3s ease, border-color 0.3s ease; }
+footer .disclaimer { font-size: 12px; color: var(--text-tertiary); margin-bottom: 15px; max-width: 550px; margin-left: auto; margin-right: auto; line-height: 1.5; text-align: left; }
+footer .credits { font-size: 13px; color: var(--text-tertiary); margin: 4px 0; line-height: 1.4; transition: color 0.3s ease; }
+footer .separator { margin: 0 8px; color: var(--separator-color); }
 footer a { color: var(--link-color); text-decoration: none; transition: color 0.3s ease; }
 footer a:hover { text-decoration: underline; }
